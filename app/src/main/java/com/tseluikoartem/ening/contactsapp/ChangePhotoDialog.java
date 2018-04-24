@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 
@@ -22,11 +20,6 @@ import android.widget.TextView;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
 
 
 /**
@@ -38,8 +31,8 @@ public class ChangePhotoDialog extends DialogFragment {
     private static final String TAG = "ChangePhotoDialog";
 
     public interface OnPhotoReceivedListener{
-        public void getBitmapImage(Bitmap bitmap);
-        public void getImagePath(String imagePath);
+        public void recieveBitmapImage(Bitmap bitmap);
+        public void recieveImagePath(String imagePath);
     }
 
     OnPhotoReceivedListener photoReceivedListener;
@@ -114,7 +107,7 @@ public class ChangePhotoDialog extends DialogFragment {
             Log.d(TAG, "onActivityResult: receieved bitmap: " + bitmap);
 
             //send the bitmap and fragment to the interface
-            photoReceivedListener.getBitmapImage(bitmap);
+            photoReceivedListener.recieveBitmapImage(bitmap);
             getDialog().dismiss();
         }
 
@@ -128,7 +121,7 @@ public class ChangePhotoDialog extends DialogFragment {
 
 
             //send the bitmap and fragment to the interface
-            photoReceivedListener.getImagePath(file.getPath());
+            photoReceivedListener.recieveImagePath(file.getPath());
             getDialog().dismiss();
 
         }

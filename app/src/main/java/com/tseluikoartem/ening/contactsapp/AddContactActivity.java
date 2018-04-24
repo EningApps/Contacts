@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
+import com.tseluikoartem.ening.contactsapp.database.ContactsDAO;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 import com.tseluikoartem.ening.contactsapp.utils.ImageHelper;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
@@ -64,6 +66,16 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
                 final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra(Contact.class.getCanonicalName(), newContact);
                 setResult(RESULT_OK, intent);
+
+                final ContactDatabase database = ContactsApp.getInstance().getDatabase();
+                final ContactsDAO contactsDAO = database.contactsDAO();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        contactsDAO.insert(newContact);
+                    }
+                }).start();
+
                 finish();
             }
         });
@@ -191,7 +203,7 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
     }
 
     @Override
-    public void getBitmapImage(Bitmap bitmap) {
+    public void recieveBitmapImage(Bitmap bitmap) {
         if(bitmap != null) {
             //compress the image (if you like)
             ImageHelper.compressBitmap(bitmap, 70);
@@ -202,7 +214,7 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
     }
 
     @Override
-    public void getImagePath(String imagePath) {
+    public void recieveImagePath(String imagePath) {
         if( !imagePath.equals("")){
             imagePath = imagePath.replace(":/", "://");
             contactPhotoUri  = imagePath;

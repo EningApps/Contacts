@@ -27,11 +27,11 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="100dp"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
 
-                app:popupTheme="@style/AppTheme.PopupOverlay" >
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
             </android.support.v7.widget.Toolbar>
 
@@ -39,9 +39,31 @@
                 android:id="@+id/toolbar_contact_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@color/colorAccent" />
+                android:src="@drawable/unknown_contact" />
+
+            <ImageView
+                android:id="@+id/ivBackArrowContact"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/ic_backarrow" />
+
+            <EditText
+                android:id="@+id/contact_nameET"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:enabled="false"
+                android:background="@drawable/name_edit_text_background_selector"
+                android:layout_marginLeft="16dp"
+                android:textColor="@color/white"
+                android:layout_marginTop="200dp"
+                android:inputType="textPersonName"
+                android:text="Name"
+                android:textSize="40sp" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -59,8 +81,9 @@
             android:id="@+id/views_container_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:addStatesFromChildren="true"
             android:orientation="vertical">
-
 
         </LinearLayout>
 

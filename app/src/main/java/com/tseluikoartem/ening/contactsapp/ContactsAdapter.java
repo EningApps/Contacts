@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -20,8 +22,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactsAdapter extends Adapter {
 
-    private LinkedList<Contact> mData;
+    private List<Contact> mData;
 
+    private List<Contact> dataCopy ;//needed for search
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -42,7 +45,8 @@ public class ContactsAdapter extends Adapter {
             }
         });
         final CircleImageView contactPhoto = ((ContactViewHolder.LinearHolder) holder).getContactPhoto();
-        UniversalImageLoader.setImage(mData.get(position).getProfileImageURI(), contactPhoto, null, "");
+        if(mData.get(position).getProfileImageURI()!=null && !mData.get(position).getProfileImageURI().equals("null"))
+            UniversalImageLoader.setImage(mData.get(position).getProfileImageURI(), contactPhoto, null, "");
         final TextView contactName = ((ContactViewHolder.LinearHolder) holder).getContactNameTV();
         contactName.setText(mData.get(position).getName());
     }
@@ -52,7 +56,26 @@ public class ContactsAdapter extends Adapter {
         return mData.size();
     }
 
-    public void setData(LinkedList<Contact> mData) {
+    public void setData(List<Contact> mData) {
+
         this.mData = mData;
+        dataCopy = new ArrayList<>();
+        dataCopy.addAll(mData);
     }
+
+    public void filter(String text) {
+        mData.clear();
+        if(text.isEmpty()){
+            mData.addAll(dataCopy);
+        } else{
+            text = text.toLowerCase();
+            for(Contact contact: dataCopy){
+                if(contact.getName().toLowerCase().contains(text) || contact.getPhoneNumber().toLowerCase().contains(text)){
+                    mData.add(contact);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 }

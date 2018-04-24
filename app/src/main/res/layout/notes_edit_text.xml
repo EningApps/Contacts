@@ -29,6 +29,7 @@
                 android:layout_marginStart="20dp"
                 app:srcCompat="@drawable/ic_note" />
 
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"

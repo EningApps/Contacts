@@ -1,16 +1,27 @@
 package com.tseluikoartem.ening.contactsapp;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Created by User on 6/12/2017.
  */
+@Entity(tableName = "contacts")
+public class Contact implements Parcelable {
 
-public class Contact implements Parcelable{
+
+    @PrimaryKey(autoGenerate = true)
+    public long id;//needed fo database
 
     private String name;
+
+    @NonNull
     private String phoneNumber;
+
     private String device;
     private String email;
     private String profileImageURI;
@@ -29,6 +40,7 @@ public class Contact implements Parcelable{
 
 
     protected Contact(Parcel in) {
+        id = in.readLong();
         name = in.readString();
         phoneNumber = in.readString();
         device = in.readString();
@@ -38,6 +50,7 @@ public class Contact implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(name);
         dest.writeString(phoneNumber);
         dest.writeString(device);
@@ -98,6 +111,14 @@ public class Contact implements Parcelable{
         return profileImageURI;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public void setProfileImageURI(String profileImageURI) {
         this.profileImageURI = profileImageURI;
     }
@@ -105,7 +126,8 @@ public class Contact implements Parcelable{
     @Override
     public String toString() {
         return "Contact{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", device='" + device + '\'' +
                 ", email='" + email + '\'' +

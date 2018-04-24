@@ -10,8 +10,8 @@
         android:layout_height="60dp"
         android:id="@+id/cardView"
         app:cardElevation="3dp"
-
         android:layout_marginTop="30dp"
+        android:layout_margin="10dp"
         android:background="@drawable/grey_border">
 
         <RelativeLayout
@@ -26,11 +26,13 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp" />
 
-            <TextView
-                android:id="@+id/phone_text_view"
+            <EditText
+                android:id="@+id/phone_edit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:enabled="false"
+                android:background="@drawable/edit_texts_background_selector"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
