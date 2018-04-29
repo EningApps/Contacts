@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:fitsSystemWindows="true"
-    tools:context="com.tseluikoartem.ening.contactsapp.ContactInfoActivity">
+    tools:context="com.tseluikoartem.ening.contactsapp.activities.ContactIDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -22,10 +22,10 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@+id/collapsing_toolbar">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 app:layout_collapseMode="pin"
@@ -47,21 +47,18 @@
 
             <ImageView
                 android:id="@+id/ivBackArrowContact"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="5dp"
                 android:src="@drawable/ic_backarrow" />
 
-            <EditText
-                android:id="@+id/contact_nameET"
+            <TextView
+                android:id="@+id/contact_nameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:enabled="false"
-                android:background="@drawable/name_edit_text_background_selector"
                 android:layout_marginLeft="16dp"
                 android:textColor="@color/white"
                 android:layout_marginTop="200dp"
-                android:inputType="textPersonName"
                 android:text="Name"
                 android:textSize="40sp" />
 

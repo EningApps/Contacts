@@ -6,44 +6,61 @@
 
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
         android:id="@+id/cardView"
-        app:cardElevation="3dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
         android:layout_margin="10dp"
-        android:background="@drawable/grey_border">
+        android:layout_marginTop="30dp"
+        android:background="@drawable/grey_border"
+        app:cardElevation="3dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/cardView"
+            android:layout_alignTop="@+id/cardView"
+            android:layout_marginTop="22dp">
 
             <ImageView
                 android:id="@+id/phone_call"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_phone"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp" />
+                android:layout_marginStart="20dp"
+                android:src="@drawable/ic_phone" />
 
-            <EditText
-                android:id="@+id/phone_edit_text"
+            <TextView
+                android:id="@+id/contact_phoneTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:enabled="false"
                 android:background="@drawable/edit_texts_background_selector"
+                android:enabled="false"
                 android:textColor="@color/black"
                 android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/phone_message"
-                android:src="@drawable/ic_message"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="20dp" />
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_message" />
+
+            <TextView
+                android:id="@+id/phoneTypeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/contact_phoneTV"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@id/phone_call"
+                android:text="Mobile"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp" />
+
 
         </RelativeLayout>
 

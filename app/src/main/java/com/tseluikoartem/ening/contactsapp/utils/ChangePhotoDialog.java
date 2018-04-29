@@ -1,4 +1,4 @@
-package com.tseluikoartem.ening.contactsapp;
+package com.tseluikoartem.ening.contactsapp.utils;
 
 import android.app.Activity;
 
@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.tseluikoartem.ening.contactsapp.R;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 
 import java.io.File;

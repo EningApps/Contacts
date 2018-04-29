@@ -1,4 +1,4 @@
-package com.tseluikoartem.ening.contactsapp;
+package com.tseluikoartem.ening.contactsapp.activities;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -8,27 +8,33 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsAdapter;
+import com.tseluikoartem.ening.contactsapp.ContactsApp;
+import com.tseluikoartem.ening.contactsapp.R;
 import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
 import com.tseluikoartem.ening.contactsapp.database.ContactsDAO;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
+import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsTouchHelper;
 import com.tseluikoartem.ening.contactsapp.utils.DataLoadingFragment;
+import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsCallback;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
+
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements DataLoadingFragment.OnDataLoadedListener {
@@ -43,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements DataLoadingFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.collapsing_toolbar);
         setSupportActionBar(toolbar);
 
         initImageLoader();
@@ -52,18 +58,29 @@ public class MainActivity extends AppCompatActivity implements DataLoadingFragme
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            startActivityForResult(new Intent(getApplicationContext(),AddContactActivity.class), ApplicationConstants.ADD_CONTACT_REQUEST_CODE);
+                final Intent intent = new Intent(getApplicationContext(),EditContactActivity.class);
+                startActivityForResult(intent, ApplicationConstants.ADD_CONTACT_REQUEST_CODE);
             }
         });
 
        // loadSystemContacts();
 
+
         mAdapterData = new ArrayList<>();
-        mAdapter = new ContactsAdapter();
+        mAdapter = new ContactsAdapter(this);
         mAdapter.setData(mAdapterData);
         mRecyclerView = findViewById(R.id.contacts_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+
+        final ContactsTouchHelper touchHelper = new ContactsTouchHelper(mRecyclerView,mAdapter);
+        final ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ContactsCallback(0, ItemTouchHelper.LEFT, touchHelper);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+
     }
 
     @Override
@@ -125,8 +142,6 @@ public class MainActivity extends AppCompatActivity implements DataLoadingFragme
         final DataLoadingFragment dataLoadingFragment = new DataLoadingFragment();
         dataLoadingFragment.show(getSupportFragmentManager(),"dataloading");
     }
-
-
 
     private void loadSystemContacts() {//TODO: check this method
 

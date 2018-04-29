@@ -1,4 +1,4 @@
-package com.tseluikoartem.ening.contactsapp;
+package com.tseluikoartem.ening.contactsapp.activities;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -9,9 +9,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,12 +18,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
-import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
-import com.tseluikoartem.ening.contactsapp.database.ContactsDAO;
+import com.tseluikoartem.ening.contactsapp.utils.ChangePhotoDialog;
+import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.R;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
+import com.tseluikoartem.ening.contactsapp.database.DatabaseOperator;
 import com.tseluikoartem.ening.contactsapp.utils.ImageHelper;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
@@ -38,84 +38,101 @@ import java.util.Random;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class AddContactActivity extends AppCompatActivity implements ChangePhotoDialog.OnPhotoReceivedListener{
+public class EditContactActivity extends AppCompatActivity implements ChangePhotoDialog.OnPhotoReceivedListener {
 
-    private CircleImageView contactPhotoIV;
     private EditText nameET;
-    private EditText emailET;
+    private EditText lastNameET;
+    private EditText companyET;
     private EditText phoneET;
-    private String contactPhotoUri;
-    private ImageView addNewContactButton;
-    private int mPreviousKeyStroke;
-    private FloatingActionButton saveContactFB;
+    private EditText emailET;
+    private Spinner phoneType;
+    private CircleImageView contactPhoto;
+    private TextView saveEditsButton;
 
-    private AddContactActivity addContactActivity = this;
+    private int mPreviousKeyStroke;
+    private String contactPhotoUri;
+    private Contact mContact;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_contact);
+        setContentView(R.layout.activity_edit_contact);
+
+        final Intent intent = getIntent();
+        if(intent!=null)
+            mContact = intent.getParcelableExtra(EditContactActivity.class.getCanonicalName());
+
+        findViews();
+        setViewsTexts();
+        setListeners();
 
 
-        saveContactFB = (FloatingActionButton) findViewById(R.id.save_contact_fab);
-        saveContactFB.setOnClickListener(new View.OnClickListener() {
+    }
+
+
+    void findViews(){
+        contactPhoto = findViewById(R.id.edit_contact_photoIV);
+        saveEditsButton = findViewById(R.id.save_edits_button);
+        nameET = findViewById(R.id.edit_nameET);
+        lastNameET = findViewById(R.id.edit_last_nameET);
+        companyET = findViewById(R.id.edit_companyET);
+        phoneET = findViewById(R.id.edit_phoneET);
+        emailET = findViewById(R.id.edit_emailET);
+        phoneType = findViewById(R.id.select_device_spinner);
+        saveEditsButton = (TextView) findViewById(R.id.save_edits_button);
+    }
+
+
+    void setViewsTexts(){
+        if(mContact !=null){
+            if(mContact.getName()!=null)
+                nameET.setText(mContact.getName());
+            if(mContact.getLastName()!=null)
+                lastNameET.setText(mContact.getLastName());
+            if(mContact.getCompany()!=null)
+                companyET.setText(mContact.getCompany());
+            if(mContact.getEmail()!=null)
+                emailET.setText(mContact.getEmail());
+            if(mContact.getPhoneNumber()!=null)
+                phoneET.setText(mContact.getPhoneNumber());
+        }
+    }
+
+    void setListeners(){
+        contactPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i = 0; i < ApplicationConstants.PERMISSIONS.length; i++){
+                    String[] permission = {ApplicationConstants.PERMISSIONS[i]};
+                    if(checkPermission(permission)){
+                        if(i == ApplicationConstants.PERMISSIONS.length - 1){
+                            Log.d("TAG", "onClick: opening the 'image selection dialog box'.");
+                            ChangePhotoDialog dialog = new ChangePhotoDialog();
+                            dialog.show(getSupportFragmentManager(),"dcd");
+                        }else{
+                            verifyPermissions(permission);
+                        }
+                    }
+                }
+            }
+        });
+
+        saveEditsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Contact newContact = getThisContact();
                 final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra(Contact.class.getCanonicalName(), newContact);
                 setResult(RESULT_OK, intent);
-
-                final ContactDatabase database = ContactsApp.getInstance().getDatabase();
-                final ContactsDAO contactsDAO = database.contactsDAO();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        contactsDAO.insert(newContact);
-                    }
-                }).start();
-
+                new DatabaseOperator().addContact(newContact);
                 finish();
             }
         });
 
-        ImageView backButton = findViewById(R.id.ivBackArrow);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        nameET = findViewById(R.id.etContactName);
-        emailET = findViewById(R.id.etContactEmail);
-        phoneET = findViewById(R.id.etContactPhone);
         setPhoneETListeners();
-
-        contactPhotoIV = findViewById(R.id.contactImage);
-        contactPhotoIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                for(int i = 0; i < ApplicationConstants.PERMISSIONS.length; i++){
-                    String[] permission = {ApplicationConstants.PERMISSIONS[i]};
-                    if(addContactActivity.checkPermission(permission)){
-                        if(i == ApplicationConstants.PERMISSIONS.length - 1){
-                            Log.d("TAG", "onClick: opening the 'image selection dialog box'.");
-                            ChangePhotoDialog dialog = new ChangePhotoDialog();
-                            FragmentManager fm = getSupportFragmentManager();
-                            dialog.show(fm,"dcd");
-                        }else{
-                            verifyPermissions(permission);
-                        }
-                    }
-                }
-
-            }
-        });
     }
-
 
 
     public void verifyPermissions(String[] permissions) {
@@ -128,7 +145,6 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
     }
 
     public boolean checkPermission(String[] permission){
-        Log.d("TAG", "checkPermission: checking permissions for:" + permission[0]);
 
         int permissionRequest = ActivityCompat.checkSelfPermission(
                 this,
@@ -172,7 +188,7 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
 
                 String number = s.toString();
 
-                saveContactFB.setVisibility(number.length()>0?View.VISIBLE:View.INVISIBLE);
+                saveEditsButton.setVisibility(number.length()>0?View.VISIBLE:View.INVISIBLE);
 
                 if(number.length() == 3 && mPreviousKeyStroke != KeyEvent.KEYCODE_DEL
                         && !number.contains("(")){
@@ -209,7 +225,7 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
             ImageHelper.compressBitmap(bitmap, 70);
             Uri imageUri = saveImageToGallery(bitmap);
             contactPhotoUri = imageUri.toString();
-            UniversalImageLoader.setImage(contactPhotoUri, contactPhotoIV, null, "");
+            UniversalImageLoader.setImage(contactPhotoUri, contactPhoto, null, "");
         }
     }
 
@@ -218,7 +234,7 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
         if( !imagePath.equals("")){
             imagePath = imagePath.replace(":/", "://");
             contactPhotoUri  = imagePath;
-            UniversalImageLoader.setImage(imagePath, contactPhotoIV, null, "");
+            UniversalImageLoader.setImage(imagePath, contactPhoto, null, "");
         }
     }
 
@@ -290,7 +306,7 @@ public class AddContactActivity extends AppCompatActivity implements ChangePhoto
         thisContact.setName(name.equals("")?"Unknown":name);
         thisContact.setPhoneNumber(phoneET.getText().toString());
         thisContact.setEmail(emailET.getText().toString());
-        thisContact.setDevice( ((Spinner)findViewById(R.id.selectDevice)).getSelectedItem().toString());
+        thisContact.setDevice( ((Spinner)findViewById(R.id.select_device_spinner)).getSelectedItem().toString());
         thisContact.setProfileImageURI(contactPhotoUri);
         return thisContact;
     }

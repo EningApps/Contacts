@@ -1,5 +1,6 @@
-package com.tseluikoartem.ening.contactsapp;
+package com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
@@ -8,10 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.R;
+import com.tseluikoartem.ening.contactsapp.activities.ContactIDetailsActivity;
+import com.tseluikoartem.ening.contactsapp.database.DatabaseOperator;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -24,7 +28,13 @@ public class ContactsAdapter extends Adapter {
 
     private List<Contact> mData;
 
-    private List<Contact> dataCopy ;//needed for search
+    private List<Contact> dataCopy ;
+
+    private Activity callingActivity;//needed for search
+
+    public ContactsAdapter(Activity callingActivity) {
+        this.callingActivity = callingActivity;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,21 +44,26 @@ public class ContactsAdapter extends Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        final View contactField = ((ContactViewHolder.LinearHolder) holder).getContactField();
+
+        final CircleImageView contactPhoto = ((ContactViewHolder.LinearHolder) holder).getContactPhoto();
+        if(mData.get(position).getProfileImageURI()!=null && !mData.get(position).getProfileImageURI().equals("null"))
+            UniversalImageLoader.setImage(mData.get(position).getProfileImageURI(), contactPhoto, null, "");
+
+        final TextView contactName = ((ContactViewHolder.LinearHolder) holder).getContactNameTV();
+        contactName.setText(mData.get(position).getName());
+
+        final View contactField = ((ContactViewHolder.LinearHolder) holder).getBackgroundField();
         contactField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Contact contact = mData.get(position);
-                final Intent intent = new Intent(view.getContext(),ContactInfoActivity.class);
-                intent.putExtra(ContactInfoActivity.class.getCanonicalName(),contact);
-                view.getContext().startActivity(intent);
+                final Intent intent = new Intent(view.getContext(),ContactIDetailsActivity.class);
+                intent.putExtra(ContactIDetailsActivity.class.getCanonicalName(),contact);
+
+                callingActivity.startActivity(intent);
             }
         });
-        final CircleImageView contactPhoto = ((ContactViewHolder.LinearHolder) holder).getContactPhoto();
-        if(mData.get(position).getProfileImageURI()!=null && !mData.get(position).getProfileImageURI().equals("null"))
-            UniversalImageLoader.setImage(mData.get(position).getProfileImageURI(), contactPhoto, null, "");
-        final TextView contactName = ((ContactViewHolder.LinearHolder) holder).getContactNameTV();
-        contactName.setText(mData.get(position).getName());
+
     }
 
     @Override
@@ -78,4 +93,19 @@ public class ContactsAdapter extends Adapter {
         notifyDataSetChanged();
     }
 
+    public void removeItem(int adapterPosition) {
+        new DatabaseOperator().deleteContact(mData.get(adapterPosition));
+        mData.remove(adapterPosition);
+        notifyItemRemoved(adapterPosition);
+    }
+
+    public void restoreItem(Contact deletedItem, int deletedIndex) {
+        mData.add(deletedIndex, deletedItem);
+        new DatabaseOperator().addContact(deletedItem);
+        notifyItemInserted(deletedIndex);
+    }
+
+    public List<Contact> getmData() {
+        return mData;
+    }
 }

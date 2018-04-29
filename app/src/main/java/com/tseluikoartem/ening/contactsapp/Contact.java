@@ -18,6 +18,8 @@ public class Contact implements Parcelable {
     public long id;//needed fo database
 
     private String name;
+    private String lastName;
+    private String company;
 
     @NonNull
     private String phoneNumber;
@@ -30,18 +32,22 @@ public class Contact implements Parcelable {
 
     }
 
-    public Contact(String name, String phoneNumber, String device, String email, String profileImageURI) {
+    public Contact(long id, String name, String lastName, String company, @NonNull String phoneNumber, String device, String email, String profileImageURI) {
+        this.id = id;
         this.name = name;
+        this.lastName = lastName;
+        this.company = company;
         this.phoneNumber = phoneNumber;
         this.device = device;
         this.email = email;
         this.profileImageURI = profileImageURI;
     }
 
-
     protected Contact(Parcel in) {
         id = in.readLong();
         name = in.readString();
+        lastName = in.readString();
+        company = in.readString();
         phoneNumber = in.readString();
         device = in.readString();
         email = in.readString();
@@ -52,6 +58,8 @@ public class Contact implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(name);
+        dest.writeString(lastName);
+        dest.writeString(company);
         dest.writeString(phoneNumber);
         dest.writeString(device);
         dest.writeString(email);
@@ -115,12 +123,25 @@ public class Contact implements Parcelable {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public void setProfileImageURI(String profileImageURI) {
         this.profileImageURI = profileImageURI;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
     }
 
     @Override

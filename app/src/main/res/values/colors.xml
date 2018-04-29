@@ -12,5 +12,6 @@
     <color name="black">#000</color>
     <color name="grey">#a6a6a6</color>
     <color name="transparent">#00a6a6a6</color>
+    <color name="red">#ff3300</color>
 
 </resources>

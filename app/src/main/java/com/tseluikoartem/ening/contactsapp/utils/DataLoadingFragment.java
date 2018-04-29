@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 
-import com.tseluikoartem.ening.contactsapp.ChangePhotoDialog;
 import com.tseluikoartem.ening.contactsapp.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
 

@@ -1,6 +1,8 @@
 package com.tseluikoartem.ening.contactsapp.utils;
 
 import android.Manifest;
+import android.app.ActivityOptions;
+import android.util.Pair;
 
 /**
  * Created by ening on 14.04.18.
@@ -21,6 +23,7 @@ public interface ApplicationConstants {
 
     public static final int CAMERA_REQUEST_CODE = 5;
     public static final int PICKFILE_REQUEST_CODE = 8352;
+
 
 
 }

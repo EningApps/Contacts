@@ -1,9 +1,10 @@
-package com.tseluikoartem.ening.contactsapp;
+package com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.tseluikoartem.ening.contactsapp.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -17,15 +18,20 @@ public class ContactViewHolder {
 
         private CircleImageView contactPhoto;
         private TextView contactNameTV;
-        private View contactField;
+        private View backgroundField, foregroundField;;
 
         LinearHolder(final View view) {
             super(view);
-            contactField = view.findViewById(R.id.iconLinearField);
+            foregroundField = view.findViewById(R.id.iconLinearField);
+            backgroundField = view.findViewById(R.id.view_background);
             contactPhoto = view.findViewById(R.id.contact_photo);
             contactNameTV = view.findViewById(R.id.contact_name);
         }
 
+
+        public View getForegroundField() {
+            return foregroundField;
+        }
 
         public CircleImageView getContactPhoto() {
             return contactPhoto;
@@ -36,8 +42,8 @@ public class ContactViewHolder {
         }
 
 
-        public View getContactField() {
-            return contactField;
+        public View getBackgroundField() {
+            return backgroundField;
         }
 
     }
