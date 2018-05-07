@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/pop_menu_del"
+        android:icon="@drawable/ic_backarrow_teal"
+        android:title="Удалить из избранного"/>
+
+</menu>

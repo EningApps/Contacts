@@ -4,6 +4,9 @@ import android.app.Application;
 import android.arch.persistence.room.Room;
 
 import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
+import com.tseluikoartem.ening.contactsapp.database.FavoriteContact;
+
+import java.util.List;
 
 /**
  * Created by ening on 21.04.18.
@@ -12,6 +15,8 @@ import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
 public class ContactsApp extends Application {
 
     public static ContactsApp instance;
+
+    private List<FavoriteContact> favoriteContactList;
 
     private ContactDatabase database;
 
@@ -28,5 +33,13 @@ public class ContactsApp extends Application {
 
     public ContactDatabase getDatabase() {
         return database;
+    }
+
+    public List<FavoriteContact> getFavoriteContactList() {
+        return favoriteContactList;
+    }
+
+    public void setFavoriteContactList(List<FavoriteContact> favoriteContactList) {
+        this.favoriteContactList = favoriteContactList;
     }
 }

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -21,28 +22,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.FavoriteContactsAdapter;
+import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsAdapter;
 import com.tseluikoartem.ening.contactsapp.ContactsApp;
 import com.tseluikoartem.ening.contactsapp.R;
 import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
 import com.tseluikoartem.ening.contactsapp.database.ContactsDAO;
+import com.tseluikoartem.ening.contactsapp.database.FavoriteContact;
+import com.tseluikoartem.ening.contactsapp.database.FavoriteContactsAsyncLoader;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
-import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsTouchHelper;
 import com.tseluikoartem.ening.contactsapp.utils.DataLoadingFragment;
 import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsCallback;
+import com.tseluikoartem.ening.contactsapp.utils.DeleteContactDialog;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements DataLoadingFragment.OnDataLoadedListener {
+public class MainActivity extends AppCompatActivity
+        implements DataLoadingFragment.OnDataLoadedListener,
+                   DeleteContactDialog.OnContactDeletedListener,
+                   ContactsCallback.RecyclerItemTouchHelperListener{
 
 
-    private RecyclerView mRecyclerView;
+    private RecyclerView mContactsRecyclerView , mFavoriteContactsRecyclerView;
     private ContactsAdapter mAdapter;
     private List<Contact> mAdapterData;
+    private List<FavoriteContact> favoriteContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,14 @@ public class MainActivity extends AppCompatActivity implements DataLoadingFragme
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.collapsing_toolbar);
         setSupportActionBar(toolbar);
+
+        favoriteContacts = new ArrayList<>();
+
+        mFavoriteContactsRecyclerView = findViewById(R.id.favorite_contacts_recycler_view);
+        final FavoriteContactsAsyncLoader favoriteContactsAsyncLoader = new FavoriteContactsAsyncLoader(this, mFavoriteContactsRecyclerView);
+        favoriteContactsAsyncLoader.execute();
+
+
 
         initImageLoader();
 
@@ -69,17 +85,16 @@ public class MainActivity extends AppCompatActivity implements DataLoadingFragme
         mAdapterData = new ArrayList<>();
         mAdapter = new ContactsAdapter(this);
         mAdapter.setData(mAdapterData);
-        mRecyclerView = findViewById(R.id.contacts_recycler_view);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
+        mContactsRecyclerView = findViewById(R.id.contacts_recycler_view);
+        mContactsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mContactsRecyclerView.setAdapter(mAdapter);
 
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mContactsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mContactsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 
-        final ContactsTouchHelper touchHelper = new ContactsTouchHelper(mRecyclerView,mAdapter);
-        final ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ContactsCallback(0, ItemTouchHelper.LEFT, touchHelper);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+        final ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ContactsCallback(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mContactsRecyclerView);
 
     }
 
@@ -93,10 +108,11 @@ public class MainActivity extends AppCompatActivity implements DataLoadingFragme
 
     }
 
+
     @Override
-    protected void onPostResume() {
+    protected void onResume() {
         updateDada();
-        super.onPostResume();
+        super.onResume();
     }
 
     @Override
@@ -222,4 +238,37 @@ public class MainActivity extends AppCompatActivity implements DataLoadingFragme
         mAdapter.setData(mAdapterData);
         mAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void deleteConfirmed(final Contact deletedContact, final int deletedIndex) {
+
+        ((FavoriteContactsAdapter) mFavoriteContactsRecyclerView.getAdapter()).removeItem(deletedContact, deletedIndex);
+        mAdapter.removeItem(deletedIndex);
+        Snackbar snackbar = Snackbar
+                .make(mContactsRecyclerView, deletedContact.getName() + " удалён из контактов", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Вернуть", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // undo is selected, restore the deleted item
+                mAdapter.restoreItem(deletedContact, deletedIndex);
+                ((FavoriteContactsAdapter) mFavoriteContactsRecyclerView.getAdapter()).restoreItem(deletedContact,deletedIndex);
+            }
+        });
+        snackbar.setActionTextColor(mContactsRecyclerView.getResources().getColor(R.color.colorAccent));
+        snackbar.show();
+    }
+
+    @Override
+    public void deleteCanceled() {
+        updateDada(); // needed to hide swipe artifact
+
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        DeleteContactDialog dialog = DeleteContactDialog.newInstance(mAdapter.getmData().get(position),position);
+        dialog.show(getSupportFragmentManager(),"delete_dialog");
+    }
+
+
 }

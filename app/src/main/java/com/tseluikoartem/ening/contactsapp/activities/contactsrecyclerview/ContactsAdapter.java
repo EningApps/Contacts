@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
 import com.tseluikoartem.ening.contactsapp.activities.ContactIDetailsActivity;
 import com.tseluikoartem.ening.contactsapp.database.DatabaseOperator;
@@ -97,12 +97,14 @@ public class ContactsAdapter extends Adapter {
         new DatabaseOperator().deleteContact(mData.get(adapterPosition));
         mData.remove(adapterPosition);
         notifyItemRemoved(adapterPosition);
+        notifyDataSetChanged();
     }
 
     public void restoreItem(Contact deletedItem, int deletedIndex) {
         mData.add(deletedIndex, deletedItem);
         new DatabaseOperator().addContact(deletedItem);
         notifyItemInserted(deletedIndex);
+        notifyDataSetChanged();
     }
 
     public List<Contact> getmData() {

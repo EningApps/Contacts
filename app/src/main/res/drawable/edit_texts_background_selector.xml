@@ -5,11 +5,9 @@
         android:drawable="@drawable/edit_text_no_border" />
     <item android:state_enabled="true">
         <shape
-            android:shape="line">
-            <stroke android:width="3dp"
-                android:color="#0027d2"
-                />
-            <!--you can change the color or width of every single line-->
+            android:shape="rectangle">
+            <solid android:color="#00000000" />
+            <stroke android:width="1dip" android:color="#7178ff" />
         </shape>
     </item>
 </selector>

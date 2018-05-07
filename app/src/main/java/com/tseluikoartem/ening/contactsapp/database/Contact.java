@@ -1,11 +1,10 @@
-package com.tseluikoartem.ening.contactsapp;
+package com.tseluikoartem.ening.contactsapp.database;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 /**
  * Created by User on 6/12/2017.
@@ -20,6 +19,8 @@ public class Contact implements Parcelable {
     private String name;
     private String lastName;
     private String company;
+    private String notes;
+    private String birhday;
 
     @NonNull
     private String phoneNumber;
@@ -32,11 +33,13 @@ public class Contact implements Parcelable {
 
     }
 
-    public Contact(long id, String name, String lastName, String company, @NonNull String phoneNumber, String device, String email, String profileImageURI) {
+    public Contact(long id, String name, String lastName, String company, String notes, String birhday, @NonNull String phoneNumber, String device, String email, String profileImageURI) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.company = company;
+        this.notes = notes;
+        this.birhday = birhday;
         this.phoneNumber = phoneNumber;
         this.device = device;
         this.email = email;
@@ -51,6 +54,7 @@ public class Contact implements Parcelable {
         phoneNumber = in.readString();
         device = in.readString();
         email = in.readString();
+        birhday = in.readString();
         profileImageURI = in.readString();
     }
 
@@ -63,6 +67,7 @@ public class Contact implements Parcelable {
         dest.writeString(phoneNumber);
         dest.writeString(device);
         dest.writeString(email);
+        dest.writeString(birhday);
         dest.writeString(profileImageURI);
     }
 
@@ -123,6 +128,21 @@ public class Contact implements Parcelable {
         return id;
     }
 
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getBirhday() {
+        return birhday;
+    }
+
+    public void setBirhday(String birhday) {
+        this.birhday = birhday;
+    }
 
     public void setProfileImageURI(String profileImageURI) {
         this.profileImageURI = profileImageURI;

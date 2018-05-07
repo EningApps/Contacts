@@ -11,26 +11,30 @@
         android:id="@+id/view_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/red">
+        android:background="@drawable/delete_gradient">
 
         <ImageView
-            android:id="@+id/delete_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_email" />
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="4dp"
+            android:scaleType="fitCenter"
+            android:layout_centerInParent="true"
+            android:layout_toLeftOf="@id/deleteTV"
+            android:src="@drawable/icon_to_left" />
+
 
         <TextView
+            android:id="@+id/deleteTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/delete_icon"
+            android:layout_marginRight="8dp"
             android:text="Delete"
+            android:layout_alignParentRight="true"
+            android:fontFamily="monospace"
             android:textColor="#fff"
-            android:textSize="13dp" />
+            android:textSize="20dp" />
 
     </RelativeLayout>
 
@@ -46,6 +50,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
             app:civ_border_color="@color/black"
             app:civ_border_width="1dp"
             android:src="@drawable/unknown_contact"
@@ -64,4 +69,5 @@
 
 
     </LinearLayout>
+
 </FrameLayout>

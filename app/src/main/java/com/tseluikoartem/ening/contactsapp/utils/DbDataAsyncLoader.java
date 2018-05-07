@@ -1,15 +1,13 @@
 package com.tseluikoartem.ening.contactsapp.utils;
 
 import android.os.AsyncTask;
-import android.widget.ProgressBar;
 
-import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.ContactsApp;
 import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
 import com.tseluikoartem.ening.contactsapp.database.ContactsDAO;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by ening on 21.04.18.

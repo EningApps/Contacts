@@ -47,4 +47,27 @@ public class ContactViewHolder {
         }
 
     }
+
+
+
+    public static class FavoriteContactHolder extends RecyclerView.ViewHolder {
+
+        private CircleImageView favoriteContactPhoto;
+        private TextView contactNameTV;
+
+        FavoriteContactHolder(final View view) {
+            super(view);
+            favoriteContactPhoto = view.findViewById(R.id.fav_contact_photo);
+            contactNameTV = view.findViewById(R.id.fav_contact_name);
+        }
+
+        public CircleImageView getFavoriteContactPhoto() {
+            return favoriteContactPhoto;
+        }
+
+        public TextView getContactNameTV() {
+            return contactNameTV;
+        }
+    }
+
 }

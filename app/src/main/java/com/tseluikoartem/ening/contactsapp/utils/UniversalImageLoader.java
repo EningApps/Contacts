@@ -23,7 +23,7 @@ import com.tseluikoartem.ening.contactsapp.R;
 
 public class UniversalImageLoader {
 
-    private static final int defaultImage = R.drawable.ic_android;
+    private static final int defaultImage = R.drawable.unknown_contact;
 
     private Context mContext;
 
@@ -40,7 +40,7 @@ public class UniversalImageLoader {
                 .cacheOnDisk(true).cacheInMemory(true)
                 .cacheOnDisk(true).resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .displayer(new FadeInBitmapDisplayer(300)).build();
+                .displayer(new FadeInBitmapDisplayer(30)).build();
 
 //        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(mContext)
 //                .defaultDisplayImageOptions(defaultOptions)

@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tseluikoartem.ening.contactsapp.R;
-import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 
 import java.io.File;
 
@@ -69,7 +68,7 @@ public class ChangePhotoDialog extends DialogFragment {
         });
 
         // Cancel button for closing the dialog
-        TextView cancelDialog = (TextView) view.findViewById(R.id.dialogCancel);
+        TextView cancelDialog = (TextView) view.findViewById(R.id.dialog_delete_cancel);
         cancelDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +88,7 @@ public class ChangePhotoDialog extends DialogFragment {
             photoReceivedListener = (OnPhotoReceivedListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnPhotoReceivedListener");
+                    + " must implement OnContactDeletedListener");
         }
     }
 

@@ -10,28 +10,35 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.tseluikoartem.ening.contactsapp.utils.ChangePhotoDialog;
-import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 import com.tseluikoartem.ening.contactsapp.database.DatabaseOperator;
 import com.tseluikoartem.ening.contactsapp.utils.ImageHelper;
+import com.tseluikoartem.ening.contactsapp.utils.KeyboardOperator;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -40,19 +47,25 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditContactActivity extends AppCompatActivity implements ChangePhotoDialog.OnPhotoReceivedListener {
 
+
     private EditText nameET;
     private EditText lastNameET;
     private EditText companyET;
     private EditText phoneET;
     private EditText emailET;
+    private EditText birhdayET;
     private Spinner phoneType;
     private CircleImageView contactPhoto;
     private TextView saveEditsButton;
+    private DatePicker mBirhdayDatePicker;
+    private ImageView pickBirthdayIV;
+
 
     private int mPreviousKeyStroke;
     private String contactPhotoUri;
     private Contact mContact;
 
+    private boolean editMode;
 
 
     @Override
@@ -61,9 +74,10 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         setContentView(R.layout.activity_edit_contact);
 
         final Intent intent = getIntent();
-        if(intent!=null)
+        if(intent!=null) {
             mContact = intent.getParcelableExtra(EditContactActivity.class.getCanonicalName());
-
+            editMode = intent.getBooleanExtra(ApplicationConstants.EDIT_CONTACT_MODE_KEY,false);
+        }
         findViews();
         setViewsTexts();
         setListeners();
@@ -74,7 +88,12 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
 
     void findViews(){
         contactPhoto = findViewById(R.id.edit_contact_photoIV);
+        if(mContact!=null)
+            UniversalImageLoader.setImage(mContact.getProfileImageURI(),contactPhoto,null,"");
         saveEditsButton = findViewById(R.id.save_edits_button);
+        if(editMode){
+            saveEditsButton.setVisibility(View.VISIBLE);
+        }
         nameET = findViewById(R.id.edit_nameET);
         lastNameET = findViewById(R.id.edit_last_nameET);
         companyET = findViewById(R.id.edit_companyET);
@@ -82,6 +101,15 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         emailET = findViewById(R.id.edit_emailET);
         phoneType = findViewById(R.id.select_device_spinner);
         saveEditsButton = (TextView) findViewById(R.id.save_edits_button);
+        pickBirthdayIV = findViewById(R.id.pick_bithdayIV);
+        birhdayET = findViewById(R.id.birhdayET);
+
+        findViewById(R.id.edit_contact_linear_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new KeyboardOperator().hideKeyboard(v);
+            }
+        });
     }
 
 
@@ -101,6 +129,7 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
     }
 
     void setListeners(){
+
         contactPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,9 +140,9 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
                             Log.d("TAG", "onClick: opening the 'image selection dialog box'.");
                             ChangePhotoDialog dialog = new ChangePhotoDialog();
                             dialog.show(getSupportFragmentManager(),"dcd");
-                        }else{
-                            verifyPermissions(permission);
                         }
+                    }else{
+                        verifyPermissions(ApplicationConstants.PERMISSIONS);
                     }
                 }
             }
@@ -126,16 +155,56 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
                 final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra(Contact.class.getCanonicalName(), newContact);
                 setResult(RESULT_OK, intent);
-                new DatabaseOperator().addContact(newContact);
+                if(editMode == true){ new DatabaseOperator().updateContact(newContact);}
+                else{ new DatabaseOperator().addContact(newContact); }
+
                 finish();
             }
         });
+
+
+        pickBirthdayIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickBirthdayIV.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.expand_icon_rotated, null));
+                if(mBirhdayDatePicker==null) {
+                    final FrameLayout frameLayout = findViewById(R.id.birtday_picker_container);
+                    final LayoutInflater inflater = getLayoutInflater();
+                    final View inflatedView = inflater.inflate(R.layout.birthday_picker, frameLayout, false);
+                    mBirhdayDatePicker = inflatedView.findViewById(R.id.birhday_date_picker);
+
+                    Calendar today = Calendar.getInstance();
+                    mBirhdayDatePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH),
+                                            new DatePicker.OnDateChangedListener() {
+                        @Override
+                        public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            birhdayET.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            birhdayET.setText(String.valueOf(dayOfMonth)+"/"+(String.valueOf(monthOfYear)+"/"+(String.valueOf(year))));
+                        }
+                    });
+
+                    frameLayout.addView(inflatedView);
+                    inflatedView.requestFocus();
+                    new KeyboardOperator().hideKeyboard(pickBirthdayIV);
+                }else{
+                    mBirhdayDatePicker = null;
+
+                    final FrameLayout frameLayout = findViewById(R.id.birtday_picker_container);
+                    frameLayout.removeAllViews();
+                    pickBirthdayIV.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.expand_date_icon, null));
+
+                }
+            }
+        });
+
+
+
 
         setPhoneETListeners();
     }
 
 
-    public void verifyPermissions(String[] permissions) {
+    private void verifyPermissions(String[] permissions) {
         Log.d("TAG", "verifyPermissions: asking user for permissions.");
         ActivityCompat.requestPermissions(
                 this,
@@ -144,7 +213,7 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         );
     }
 
-    public boolean checkPermission(String[] permission){
+    private boolean checkPermission(String[] permission){
 
         int permissionRequest = ActivityCompat.checkSelfPermission(
                 this,
@@ -160,7 +229,6 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
 
 
     private void setPhoneETListeners(){
-
 
         phoneET.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -301,14 +369,18 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
 
 
     private Contact getThisContact(){
-        final Contact thisContact = new Contact();
-        String name = nameET.getText().toString();
-        thisContact.setName(name.equals("")?"Unknown":name);
-        thisContact.setPhoneNumber(phoneET.getText().toString());
-        thisContact.setEmail(emailET.getText().toString());
-        thisContact.setDevice( ((Spinner)findViewById(R.id.select_device_spinner)).getSelectedItem().toString());
-        thisContact.setProfileImageURI(contactPhotoUri);
-        return thisContact;
+        mContact = new Contact();
+        mContact.setName(nameET.getText().toString().equals("")? "Unknown" :nameET.getText().toString());
+        mContact.setLastName(lastNameET.getText().toString());
+        mContact.setCompany(companyET.getText().toString());
+        mContact.setPhoneNumber(phoneET.getText().toString());
+        mContact.setEmail(emailET.getText().toString());
+        mContact.setDevice( ((Spinner)findViewById(R.id.select_device_spinner)).getSelectedItem().toString());
+        mContact.setProfileImageURI(contactPhotoUri);
+        mContact.setLastName(lastNameET.getText().toString());
+        mContact.setCompany(companyET.getText().toString());
+        mContact.setBirhday(birhdayET.getText().toString());
+        return mContact;
     }
 
 }

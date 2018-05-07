@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 
-import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
 
 import java.util.List;

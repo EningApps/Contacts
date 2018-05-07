@@ -16,10 +16,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.tseluikoartem.ening.contactsapp.Contact;
+import com.tseluikoartem.ening.contactsapp.ContactsApp;
+import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
+import com.tseluikoartem.ening.contactsapp.database.DatabaseOperator;
+import com.tseluikoartem.ening.contactsapp.database.FavoriteContact;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
+
+import java.util.stream.Stream;
+
+import static com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants.ADD_NEW_FAV_CONTACT;
+import static com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants.EDIT_CONTACT_INTENT_CODE;
 
 public class ContactIDetailsActivity extends AppCompatActivity {
 
@@ -66,7 +74,8 @@ public class ContactIDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final Intent editIntent = new Intent(getApplicationContext(),EditContactActivity.class);
                 editIntent.putExtra(EditContactActivity.class.getCanonicalName(),mContact);
-                startActivity(editIntent);
+                editIntent.putExtra(ApplicationConstants.EDIT_CONTACT_MODE_KEY,true);
+                startActivityForResult(editIntent, EDIT_CONTACT_INTENT_CODE);
                 overridePendingTransition(R.anim.diagonaltranslate,R.anim.alpha);
             }
         });
@@ -133,9 +142,25 @@ public class ContactIDetailsActivity extends AppCompatActivity {
             layout.addView(emailView);
         }
 
-        final View notesView= ltInflater.inflate(R.layout.notes_edit_text, layout, false);
+        final View notesView = ltInflater.inflate(R.layout.notes_card_view, layout, false);
+        final TextView dataTV = notesView.findViewById(R.id.birhday_dateTV);
+        if(!mContact.getBirhday().equals(""))
+            dataTV.setText(mContact.getBirhday());
+        else{
+            dataTV.setVisibility(View.INVISIBLE);
+            final ImageView dataImageToHide = notesView.findViewById(R.id.data_icon_to_hide);
+            dataImageToHide.setVisibility(View.INVISIBLE);
+        }
         notesET = notesView.findViewById(R.id.notesET);
+        notesET.setText(mContact.getNotes());
         notesView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notesET.setEnabled(true);
+                notesET.setFocusable(true);
+            }
+        });
+        notesET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 notesET.setEnabled(true);
@@ -145,6 +170,72 @@ public class ContactIDetailsActivity extends AppCompatActivity {
 
         layout.addView(notesView);
 
+
+
+        final View contactActivitiesCardView = ltInflater.inflate(R.layout.phone_activities_cardview, layout, false);
+        layout.addView(contactActivitiesCardView);
+
+        final View sendMessView = contactActivitiesCardView.findViewById(R.id.send_messageTV);
+        final View sendContactView = contactActivitiesCardView.findViewById(R.id.send_contactTV);
+        final View addToFavView = contactActivitiesCardView.findViewById(R.id.add_to_favoriteTV);
+        sendMessView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", mContact.getPhoneNumber(), null));
+                startActivity(smsIntent);
+            }
+        });
+        sendContactView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("smsto:");
+                Intent sendContactIntent = new Intent(Intent.ACTION_SENDTO, uri);
+                sendContactIntent.putExtra("sms_body", mContact.toString());
+                startActivity(sendContactIntent);
+            }
+        });
+        addToFavView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean alreadyContains = false;
+                for(FavoriteContact contact : ContactsApp.getInstance().getFavoriteContactList()){
+                    if(contact.getName().equals(mContact.getName()) && contact.getPhoneNumber().equals(mContact.getPhoneNumber()))
+                        alreadyContains = true;
+                }
+                if(!alreadyContains) {
+                    final DatabaseOperator databaseOperator = new DatabaseOperator();
+                    databaseOperator.addFavoriteContact(new FavoriteContact(mContact));
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.putExtra(ADD_NEW_FAV_CONTACT, mContact);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(),"Этот контакт уже есть в избранном", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        final View bufView = ltInflater.inflate(R.layout.buf_view, layout, false);
+        layout.addView(bufView);
+
+
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == ApplicationConstants.EDIT_CONTACT_INTENT_CODE && resultCode == RESULT_OK){
+            final Contact editedContact = (Contact) data.getParcelableExtra(Contact.class.getCanonicalName());
+            nameTV.setText(editedContact.getName());
+            phoneTV.setText(editedContact.getPhoneNumber());
+            if(emailTV!= null)
+                emailTV.setText(editedContact.getEmail());
+            phoneTypeTV.setText(editedContact.getDevice());
+
+            mContact = editedContact;
+
+        }
     }
 
     private void verifyPermissions(String[] permissions) { //TODO: нужно для contactAdaptera, убрать эту штуку в один класс + из EditContactActivity
@@ -170,4 +261,6 @@ public class ContactIDetailsActivity extends AppCompatActivity {
             return true;
         }
     }
+
+
 }

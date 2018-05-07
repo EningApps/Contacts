@@ -5,12 +5,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="8dp"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.tseluikoartem.ening.contactsapp.activities.MainActivity"
     tools:showIn="@layout/activity_main">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/favorities_icon" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/colorAccent"
+                    android:text="Favorities"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/favorite_contacts_recycler_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:orientation="vertical">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@color/colorAccent"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/contacts_recycler_view"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
