@@ -21,10 +21,15 @@ public class Contact implements Parcelable {
     private String company;
     private String notes;
     private String birhday;
+    private String meetingPlace;
+    private String vkUrl;
+    private String facebookUrl;
+    private String twitterUrl;
+    private String githubUrl;
+
 
     @NonNull
     private String phoneNumber;
-
     private String device;
     private String email;
     private String profileImageURI;
@@ -33,13 +38,21 @@ public class Contact implements Parcelable {
 
     }
 
-    public Contact(long id, String name, String lastName, String company, String notes, String birhday, @NonNull String phoneNumber, String device, String email, String profileImageURI) {
+    public Contact(long id, String name, String lastName, String company, String notes, String birhday, String meetingPlace,
+                   String vkUrl, String facebookUrl, String twitterUrl, String githubUrl, @NonNull String phoneNumber,
+                   String device, String email, String profileImageURI) {
+
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.company = company;
         this.notes = notes;
         this.birhday = birhday;
+        this.meetingPlace = meetingPlace;
+        this.vkUrl = vkUrl;
+        this.facebookUrl = facebookUrl;
+        this.twitterUrl = twitterUrl;
+        this.githubUrl = githubUrl;
         this.phoneNumber = phoneNumber;
         this.device = device;
         this.email = email;
@@ -55,6 +68,11 @@ public class Contact implements Parcelable {
         device = in.readString();
         email = in.readString();
         birhday = in.readString();
+        meetingPlace = in.readString();
+        vkUrl =  in.readString();
+        facebookUrl = in.readString();
+        twitterUrl = in.readString();
+        githubUrl = in.readString();
         profileImageURI = in.readString();
     }
 
@@ -68,6 +86,11 @@ public class Contact implements Parcelable {
         dest.writeString(device);
         dest.writeString(email);
         dest.writeString(birhday);
+        dest.writeString(meetingPlace);
+        dest.writeString(vkUrl);
+        dest.writeString(facebookUrl);
+        dest.writeString(twitterUrl);
+        dest.writeString(githubUrl);
         dest.writeString(profileImageURI);
     }
 
@@ -88,6 +111,15 @@ public class Contact implements Parcelable {
         }
     };
 
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -96,11 +128,52 @@ public class Contact implements Parcelable {
         this.name = name;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getBirhday() {
+        return birhday;
+    }
+
+    public void setBirhday(String birhday) {
+        this.birhday = birhday;
+    }
+
+    public String getMeetingPlace() {
+        return meetingPlace;
+    }
+
+    public void setMeetingPlace(String meetingPlace) {
+        this.meetingPlace = meetingPlace;
+    }
+
+    @NonNull
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(@NonNull String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -124,44 +197,40 @@ public class Contact implements Parcelable {
         return profileImageURI;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public String getBirhday() {
-        return birhday;
-    }
-
-    public void setBirhday(String birhday) {
-        this.birhday = birhday;
-    }
-
     public void setProfileImageURI(String profileImageURI) {
         this.profileImageURI = profileImageURI;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getVkUrl() {
+        return vkUrl;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setVkUrl(String vkUrl) {
+        this.vkUrl = vkUrl;
     }
 
-    public String getCompany() {
-        return company;
+    public String getFacebookUrl() {
+        return facebookUrl;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setFacebookUrl(String facebookUrl) {
+        this.facebookUrl = facebookUrl;
+    }
+
+    public String getTwitterUrl() {
+        return twitterUrl;
+    }
+
+    public void setTwitterUrl(String twitterUrl) {
+        this.twitterUrl = twitterUrl;
+    }
+
+    public String getGithubUrl() {
+        return githubUrl;
+    }
+
+    public void setGithubUrl(String githubUrl) {
+        this.githubUrl = githubUrl;
     }
 
     @Override
@@ -169,6 +238,15 @@ public class Contact implements Parcelable {
         return "Contact{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", company='" + company + '\'' +
+                ", notes='" + notes + '\'' +
+                ", birhday='" + birhday + '\'' +
+                ", meetingPlace='" + meetingPlace + '\'' +
+                ", vkUrl='" + vkUrl + '\'' +
+                ", facebookUrl='" + facebookUrl + '\'' +
+                ", twitterUrl='" + twitterUrl + '\'' +
+                ", githubUrl='" + githubUrl + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", device='" + device + '\'' +
                 ", email='" + email + '\'' +

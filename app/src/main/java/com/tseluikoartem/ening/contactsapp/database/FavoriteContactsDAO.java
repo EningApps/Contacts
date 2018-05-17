@@ -17,8 +17,11 @@ public interface FavoriteContactsDAO {
     @Query("SELECT * FROM favorite_contacts")
     List<FavoriteContact> getAll();
 
-    @Query("SELECT * FROM contacts WHERE id = :id")
+    @Query("SELECT * FROM favorite_contacts WHERE id = :id")
     FavoriteContact getById(long id);
+
+    @Query("SELECT * FROM favorite_contacts WHERE name = :name")
+    FavoriteContact getByName(String name);
 
     @Insert
     void insert(FavoriteContact favContact);

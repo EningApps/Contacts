@@ -13,5 +13,6 @@
     <color name="grey">#a6a6a6</color>
     <color name="transparent">#00a6a6a6</color>
     <color name="red">#ff3300</color>
+    <color name="light_grey">#acacac</color>
 
 </resources>

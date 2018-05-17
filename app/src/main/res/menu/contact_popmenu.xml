@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/pop_menu_del"
-        android:icon="@drawable/ic_backarrow_teal"
+        android:icon="@drawable/ic_backarrow"
         android:title="Удалить из избранного"/>
 
 </menu>

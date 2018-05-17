@@ -58,7 +58,7 @@ public class ContactsAdapter extends Adapter {
             public void onClick(View view) {
                 final Contact contact = mData.get(position);
                 final Intent intent = new Intent(view.getContext(),ContactIDetailsActivity.class);
-                intent.putExtra(ContactIDetailsActivity.class.getCanonicalName(),contact);
+                intent.putExtra(Contact.class.getCanonicalName(),contact);
 
                 callingActivity.startActivity(intent);
             }

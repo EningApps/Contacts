@@ -48,7 +48,7 @@ public class FavoriteContactsAdapter extends Adapter {
             public void onClick(View v) {
                 final Contact contact = mFavoriteContactsData.get(position);
                 final Intent intent = new Intent(contactPhoto.getContext(),ContactIDetailsActivity.class);
-                intent.putExtra(ContactIDetailsActivity.class.getCanonicalName(),contact);
+                intent.putExtra(Contact.class.getCanonicalName(),contact);
                 contactPhoto.getContext().startActivity(intent);
             }
         });

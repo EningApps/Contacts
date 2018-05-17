@@ -10,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.maps.MapView;
 import com.tseluikoartem.ening.contactsapp.ContactsApp;
 import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
@@ -24,16 +26,16 @@ import com.tseluikoartem.ening.contactsapp.database.FavoriteContact;
 import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
-import java.util.stream.Stream;
-
 import static com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants.ADD_NEW_FAV_CONTACT;
 import static com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants.EDIT_CONTACT_INTENT_CODE;
 
 public class ContactIDetailsActivity extends AppCompatActivity {
 
 
-    private ImageView mContactPhoto;
+
     private Contact mContact;
+
+    private ImageView mContactPhoto;
     private TextView emailTV;
     private TextView phoneTV;
     private TextView phoneTypeTV;
@@ -52,12 +54,13 @@ public class ContactIDetailsActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+
+                onBackPressed();//overwritten method
             }
         });
 
         final Intent intent = getIntent();
-        mContact = intent.getParcelableExtra(ContactIDetailsActivity.class.getCanonicalName());
+        mContact = intent.getParcelableExtra(Contact.class.getCanonicalName());
         mContactPhoto = findViewById(R.id.toolbar_contact_photo);
         if(mContact.getProfileImageURI()!=null && !mContact.getProfileImageURI().equals("null"))
             UniversalImageLoader.setImage(mContact.getProfileImageURI(), mContactPhoto, null, "");
@@ -90,6 +93,31 @@ public class ContactIDetailsActivity extends AppCompatActivity {
         nameTV = findViewById(R.id.contact_nameTV);
         nameTV.setText(mContact.getName());
 
+        findPhoneField(ltInflater,layout);
+
+        findEmailField(ltInflater,layout);
+
+        findNotesField(ltInflater,layout);
+
+        findActivitiesField(ltInflater,layout);
+
+        findSocialsFields(ltInflater,layout);
+
+        //  final View meetingPlaceCardView = ltInflater.inflate(R.layout.meeting_place_cardview, layout, false);
+
+
+        //  final View mapCardView = ltInflater.inflate(R.layout.map_details_view, layout, false);
+
+
+
+        final View bufView = ltInflater.inflate(R.layout.buf_view, layout, false);
+        layout.addView(bufView);
+
+
+
+    }
+
+    private void findPhoneField(LayoutInflater ltInflater, ViewGroup layout) {
         //adding phone field to layout
         if( mContact.getPhoneNumber()!=null&&!mContact.getPhoneNumber().equals("")) {
             final View phoneView = ltInflater.inflate(R.layout.phone_cardview, layout, false);
@@ -120,7 +148,9 @@ public class ContactIDetailsActivity extends AppCompatActivity {
             layout.addView(phoneView);
         }
 
-        //email if needed
+    }
+
+    private void findEmailField(LayoutInflater ltInflater, LinearLayout layout) {
         if( mContact.getEmail()!=null&&!mContact.getEmail().equals("")) {
             final View emailView = ltInflater.inflate(R.layout.email_cardview, layout, false);
             emailTV = emailView.findViewById(R.id.contact_emailTV);
@@ -141,7 +171,9 @@ public class ContactIDetailsActivity extends AppCompatActivity {
             });
             layout.addView(emailView);
         }
+    }
 
+    private void findNotesField(LayoutInflater ltInflater, ViewGroup layout) {
         final View notesView = ltInflater.inflate(R.layout.notes_card_view, layout, false);
         final TextView dataTV = notesView.findViewById(R.id.birhday_dateTV);
         if(!mContact.getBirhday().equals(""))
@@ -167,11 +199,10 @@ public class ContactIDetailsActivity extends AppCompatActivity {
                 notesET.setFocusable(true);
             }
         });
-
         layout.addView(notesView);
+    }
 
-
-
+    private void findActivitiesField(LayoutInflater ltInflater, ViewGroup layout) {
         final View contactActivitiesCardView = ltInflater.inflate(R.layout.phone_activities_cardview, layout, false);
         layout.addView(contactActivitiesCardView);
 
@@ -191,7 +222,7 @@ public class ContactIDetailsActivity extends AppCompatActivity {
                 Uri uri = Uri.parse("smsto:");
                 Intent sendContactIntent = new Intent(Intent.ACTION_SENDTO, uri);
                 sendContactIntent.putExtra("sms_body", mContact.toString());
-                startActivity(sendContactIntent);
+                startActivity(Intent.createChooser(sendContactIntent, "Choose Program"));
             }
         });
         addToFavView.setOnClickListener(new View.OnClickListener() {
@@ -213,32 +244,83 @@ public class ContactIDetailsActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        final View bufView = ltInflater.inflate(R.layout.buf_view, layout, false);
-        layout.addView(bufView);
-
-
-
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == ApplicationConstants.EDIT_CONTACT_INTENT_CODE && resultCode == RESULT_OK){
-            final Contact editedContact = (Contact) data.getParcelableExtra(Contact.class.getCanonicalName());
-            nameTV.setText(editedContact.getName());
-            phoneTV.setText(editedContact.getPhoneNumber());
-            if(emailTV!= null)
-                emailTV.setText(editedContact.getEmail());
-            phoneTypeTV.setText(editedContact.getDevice());
+    private void findSocialsFields(LayoutInflater ltInflater, ViewGroup layout) {
+        final View socialsTitleView = ltInflater.inflate(R.layout.socials_title_cardview, layout, false);
+        //chek if socials fields title needed
+        if(     !mContact.getVkUrl().equals("vk.com/") && !mContact.getVkUrl().equals("") ||
+                !mContact.getFacebookUrl().equals("facebook.com/") && !mContact.getFacebookUrl().equals("") ||
+                !mContact.getTwitterUrl().equals("twitter.com/") && !mContact.getTwitterUrl().equals("")||
+                !mContact.getGithubUrl().equals("github.com/") && !mContact.getGithubUrl().equals("")){
+            layout.addView(socialsTitleView);
+        }
 
-            mContact = editedContact;
+        final View vkCardView = ltInflater.inflate(R.layout.vk_cardview, layout, false);
+        final TextView vkLinkTV = vkCardView.findViewById(R.id.vk_linkTV);
+        if(!mContact.getVkUrl().equals("vk.com/") && !mContact.getVkUrl().equals("")){
+            vkLinkTV.setText(mContact.getVkUrl());
+            vkCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent browser_intent=new Intent(Intent.ACTION_VIEW, Uri.parse("http://"+vkLinkTV.getText().toString()));
+                    startActivity(browser_intent);
+                }
+            });
+            layout.addView(vkCardView);
+        }
 
+        final View facebookCardView = ltInflater.inflate(R.layout.facebook_cardview, layout, false);
+        final TextView facebookLinkTV = facebookCardView.findViewById(R.id.facebook_linkTV);
+        if(!mContact.getFacebookUrl().equals("facebook.com/") && !mContact.getFacebookUrl().equals("")){
+            facebookLinkTV.setText(mContact.getFacebookUrl());
+            facebookCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent browser_intent=new Intent(Intent.ACTION_VIEW, Uri.parse("http://"+facebookLinkTV.getText().toString()));
+                    startActivity(browser_intent);
+                }
+            });
+            layout.addView(facebookCardView);
+        }
+
+        final View twitterCardView = ltInflater.inflate(R.layout.twitter_cardview, layout, false);
+        final TextView twitterLinkTV = twitterCardView.findViewById(R.id.twitter_linkTV);
+        if(!mContact.getTwitterUrl().equals("twitter.com/") && !mContact.getTwitterUrl().equals("")){
+            twitterLinkTV.setText(mContact.getTwitterUrl());
+            twitterCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent browser_intent=new Intent(Intent.ACTION_VIEW, Uri.parse("http://"+twitterLinkTV.getText().toString()));
+                    startActivity(browser_intent);
+                }
+            });
+            layout.addView(twitterCardView);
+        }
+
+        final View githubCardView = ltInflater.inflate(R.layout.github_cardview, layout, false);
+        final TextView githubLinkTV = githubCardView.findViewById(R.id.github_linkTV);
+        if(!mContact.getGithubUrl().equals("github.com/") && !mContact.getGithubUrl().equals("")){
+            githubLinkTV.setText(mContact.getGithubUrl());
+            githubCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Intent browser_intent=new Intent(Intent.ACTION_VIEW, Uri.parse("http://"+githubLinkTV.getText().toString()));
+                    startActivity(browser_intent);
+                }
+            });
+            layout.addView(githubCardView);
         }
     }
 
-    private void verifyPermissions(String[] permissions) { //TODO: нужно для contactAdaptera, убрать эту штуку в один класс + из EditContactActivity
+    @Override
+    public void onBackPressed() {
+        final Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void verifyPermissions(String[] permissions) {
         Log.d("TAG", "verifyPermissions: asking user for permissions.");
         ActivityCompat.requestPermissions(
                 this,

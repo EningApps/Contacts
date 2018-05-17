@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -19,6 +20,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -26,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.tseluikoartem.ening.contactsapp.database.FavoriteContact;
 import com.tseluikoartem.ening.contactsapp.utils.ChangePhotoDialog;
 import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
@@ -47,6 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditContactActivity extends AppCompatActivity implements ChangePhotoDialog.OnPhotoReceivedListener {
 
+    private Contact mContact;
 
     private EditText nameET;
     private EditText lastNameET;
@@ -54,19 +59,24 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
     private EditText phoneET;
     private EditText emailET;
     private EditText birhdayET;
+    private EditText mapET;
+    private EditText vkUrlET;
+    private EditText facebookUrlET;
+    private EditText twitterUrlET;
+    private EditText githubUrlET;
+
     private Spinner phoneType;
     private CircleImageView contactPhoto;
     private TextView saveEditsButton;
     private DatePicker mBirhdayDatePicker;
     private ImageView pickBirthdayIV;
+    private Button openMapButton;
 
 
-    private int mPreviousKeyStroke;
     private String contactPhotoUri;
-    private Contact mContact;
-
+    private String oldName;
     private boolean editMode;
-
+    private int mPreviousKeyStroke;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,11 +87,12 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         if(intent!=null) {
             mContact = intent.getParcelableExtra(EditContactActivity.class.getCanonicalName());
             editMode = intent.getBooleanExtra(ApplicationConstants.EDIT_CONTACT_MODE_KEY,false);
+            if(mContact!=null)
+                oldName = mContact.getName();
         }
         findViews();
         setViewsTexts();
         setListeners();
-
 
     }
 
@@ -103,13 +114,12 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         saveEditsButton = (TextView) findViewById(R.id.save_edits_button);
         pickBirthdayIV = findViewById(R.id.pick_bithdayIV);
         birhdayET = findViewById(R.id.birhdayET);
+        mapET = findViewById(R.id.mapET);
+        vkUrlET = findViewById(R.id.vk_linkET);
+        facebookUrlET = findViewById(R.id.facebook_linkET);
+        twitterUrlET = findViewById(R.id.twitter_linkET);
+        githubUrlET = findViewById(R.id.github_linkET);
 
-        findViewById(R.id.edit_contact_linear_layout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new KeyboardOperator().hideKeyboard(v);
-            }
-        });
     }
 
 
@@ -125,6 +135,16 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
                 emailET.setText(mContact.getEmail());
             if(mContact.getPhoneNumber()!=null)
                 phoneET.setText(mContact.getPhoneNumber());
+            if(mContact.getBirhday()!=null)
+                birhdayET.setText(mContact.getBirhday());
+            if(mContact.getVkUrl()!=null)
+                vkUrlET.setText(mContact.getVkUrl());
+            if(mContact.getFacebookUrl()!=null)
+                facebookUrlET.setText(mContact.getFacebookUrl());
+            if(mContact.getTwitterUrl()!=null)
+                twitterUrlET.setText(mContact.getTwitterUrl());
+            if(mContact.getGithubUrl()!=null)
+                githubUrlET.setText(mContact.getGithubUrl());
         }
     }
 
@@ -151,18 +171,17 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         saveEditsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Contact newContact = getThisContact();
-                final Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra(Contact.class.getCanonicalName(), newContact);
-                setResult(RESULT_OK, intent);
-                if(editMode == true){ new DatabaseOperator().updateContact(newContact);}
-                else{ new DatabaseOperator().addContact(newContact); }
-
-                finish();
+                saveEdits();
             }
         });
 
 
+        birhdayET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickBirthdayIV.performClick();// i shouldn't do like this, yes?
+            }
+        });
         pickBirthdayIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,7 +207,6 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
                     new KeyboardOperator().hideKeyboard(pickBirthdayIV);
                 }else{
                     mBirhdayDatePicker = null;
-
                     final FrameLayout frameLayout = findViewById(R.id.birtday_picker_container);
                     frameLayout.removeAllViews();
                     pickBirthdayIV.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.expand_date_icon, null));
@@ -198,6 +216,21 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         });
 
 
+
+
+
+        findViewById(R.id.edit_contact_linear_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new KeyboardOperator().hideKeyboard(v);
+            }
+        });
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();//overwritten method
+            }
+        });
 
 
         setPhoneETListeners();
@@ -286,6 +319,45 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         });
     }
 
+    private void saveEdits(){
+        final Contact newContact = getThisContact();
+        Intent intent;
+        if(editMode){
+            intent = new Intent(getApplicationContext(), ContactIDetailsActivity.class);
+        }else {
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+
+        }
+        intent.putExtra(Contact.class.getCanonicalName(), newContact);
+        if(editMode == true){
+            new DatabaseOperator().updateContact(newContact,oldName);
+            new DatabaseOperator().updateFavoriteContact(new FavoriteContact(newContact),oldName);
+        }
+        else{
+
+            new DatabaseOperator().addContact(newContact);
+            final CheckBox checkBox = findViewById(R.id.check_box_add_calendar_event);
+            if(birhdayET.getText().toString()!="" && checkBox.isChecked()){
+                Calendar beginTime = Calendar.getInstance();
+                beginTime.set(mBirhdayDatePicker.getYear(), mBirhdayDatePicker.getMonth(), mBirhdayDatePicker.getDayOfMonth(), 10, 30);
+                Calendar endTime = Calendar.getInstance();
+                endTime.set(mBirhdayDatePicker.getYear(), mBirhdayDatePicker.getMonth(), mBirhdayDatePicker.getDayOfMonth(), 10, 30);
+                Intent calendarIntent = new Intent(Intent.ACTION_INSERT)
+                        .setData(CalendarContract.Events.CONTENT_URI)
+                        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                        .putExtra(CalendarContract.Events.TITLE, "Yoga")
+                        .putExtra(CalendarContract.Events.DESCRIPTION, "Group class")
+                        .putExtra(CalendarContract.Events.EVENT_LOCATION, "The gym")
+                        .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+                        .putExtra(Intent.EXTRA_EMAIL, "rowan@example.com,trevor@example.com");
+                startActivity(calendarIntent);
+            }
+        }
+
+        startActivity(intent);
+    }
+
     @Override
     public void recieveBitmapImage(Bitmap bitmap) {
         if(bitmap != null) {
@@ -369,17 +441,25 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
 
 
     private Contact getThisContact(){
-        mContact = new Contact();
+        if(mContact == null) {
+            mContact = new Contact();
+        }
         mContact.setName(nameET.getText().toString().equals("")? "Unknown" :nameET.getText().toString());
         mContact.setLastName(lastNameET.getText().toString());
         mContact.setCompany(companyET.getText().toString());
         mContact.setPhoneNumber(phoneET.getText().toString());
         mContact.setEmail(emailET.getText().toString());
         mContact.setDevice( ((Spinner)findViewById(R.id.select_device_spinner)).getSelectedItem().toString());
-        mContact.setProfileImageURI(contactPhotoUri);
+        if(contactPhotoUri!=null)
+          mContact.setProfileImageURI(contactPhotoUri);
         mContact.setLastName(lastNameET.getText().toString());
         mContact.setCompany(companyET.getText().toString());
         mContact.setBirhday(birhdayET.getText().toString());
+        mContact.setMeetingPlace(mapET.getText().toString());
+        mContact.setVkUrl(vkUrlET.getText().toString());
+        mContact.setFacebookUrl(facebookUrlET.getText().toString());
+        mContact.setTwitterUrl(twitterUrlET.getText().toString());
+        mContact.setGithubUrl(githubUrlET.getText().toString());
         return mContact;
     }
 

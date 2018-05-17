@@ -3,28 +3,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/edit_contact_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/save_edits_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:gravity="end"
-            android:layout_gravity="end"
-            android:text="Сохранить"
-            android:visibility="invisible"
-            android:background="@drawable/grey_dashed_bottom_line"
-            android:layout_marginBottom="4dp"
-            android:textColor="@color/colorAccent"
-            android:textSize="23sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/save_edits_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/grey_dashed_line"
+                android:gravity="center"
+                android:text="Сохранить"
+                android:textColor="@color/colorAccent"
+                android:textSize="23sp"
+                android:visibility="invisible" />
+
+            <View
+                android:layout_width="64dp"
+                android:layout_height="2dp"
+                android:background="@drawable/grey_dashed_line"
+                android:layout_alignBottom="@id/save_edits_button"
+                android:layout_below="@id/save_edits_button"
+                android:layout_alignParentRight="true"/>
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="48dp"
+                android:layout_height="64dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                app:srcCompat="@drawable/back_arrow_pink" />
+
+
+
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,12 +111,23 @@
 
         </LinearLayout>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Common information"
+            android:layout_marginTop="32dp"
+            android:textSize="18sp"
+            android:textColor="@color/colorAccent"
+            android:fontFamily="sans-serif" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/grey_border_bottom">
 
             <View
@@ -197,28 +237,44 @@
 
             <EditText
                 android:id="@+id/birhdayET"
-                android:layout_width="match_parent"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@id/view3"
-                android:hint="Birhday"
+                android:layout_alignTop="@+id/birthday_icon"
+                android:layout_toEndOf="@+id/birthday_icon"
                 android:focusable="false"
-                android:enabled="false"
+                android:hint="Birhday"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
-                android:layout_marginRight="40dp"
                 android:textSize="16sp" />
 
             <ImageView
                 android:id="@+id/pick_bithdayIV"
                 android:layout_width="36dp"
                 android:layout_height="24dp"
-                android:scaleType="centerCrop"
+                android:layout_alignBottom="@+id/birhdayET"
                 android:layout_alignParentEnd="true"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="8dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/expand_date_icon" />
+                android:layout_below="@+id/textView2"
+                android:background="@drawable/expand_date_icon"
+                android:scaleType="centerCrop" />
+
+            <CheckBox
+                android:id="@+id/check_box_add_calendar_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/birhdayET"
+                android:layout_marginEnd="24dp"
+                android:layout_toStartOf="@+id/pick_bithdayIV"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/check_box_add_calendar_event"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="22dp"
+                android:text="Add event to calendar"
+                android:textSize="12sp" />
 
 
         </RelativeLayout>
@@ -230,10 +286,202 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:background="@drawable/grey_border_bottom">
-
-
         </FrameLayout>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif"
+            android:text="Extra information"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:background="@drawable/grey_border_bottom">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/vk_linkET"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/grey"
+                    android:text="vk.com/"
+                    android:hint="vk.com/user_id"
+                    android:textAlignment="center" />
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="32dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/vk_icon_grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/facebook_linkET"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/grey"
+                    android:text="facebook.com/"
+                    android:hint="facebok.com/user_page"
+                    android:textAlignment="center" />
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="32dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/facebook_logo_grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/twitter_linkET"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/grey"
+                    android:text="twitter.com/"
+                    android:hint="twitter.com/user_login"
+                    android:textAlignment="center" />
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="32dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/twitter_logo_grey" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/github_linkET"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginTop="8dp"
+                    android:hint="github.com/user_login"
+                    android:text="github.com/"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey" />
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:elevation="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/github_logo_grey" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/grey_border_bottom">
+
+            <View
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/map_icon"
+                android:background="@color/colorAccent" />
+
+            <ImageView
+                android:id="@+id/map_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/contacts_app_icon_round" />
+
+            <EditText
+                android:id="@+id/mapET"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/map_icon"
+                android:layout_toEndOf="@+id/map_icon"
+                android:hint="Meeting place"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:theme="@style/Widget.AppCompat.Button.Colored"
+                android:elevation="3dp"
+                android:id="@+id/mapIV"
+                android:layout_width="80dp"
+                android:layout_height="36dp"
+                android:layout_marginRight="8dp"
+                android:layout_alignBottom="@+id/mapET"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/rounded_button"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Open maps" />
+
+
+        </RelativeLayout>
 
 
     </LinearLayout>
