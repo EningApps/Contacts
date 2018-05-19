@@ -5,8 +5,12 @@ import android.arch.persistence.room.Room;
 
 import com.tseluikoartem.ening.contactsapp.database.ContactDatabase;
 import com.tseluikoartem.ening.contactsapp.database.FavoriteContact;
+import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 
 import java.util.List;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by ening on 21.04.18.
@@ -18,6 +22,8 @@ public class ContactsApp extends Application {
 
     private List<FavoriteContact> favoriteContactList;
 
+    private Retrofit retrofit;
+
     private ContactDatabase database;
 
     @Override
@@ -25,6 +31,13 @@ public class ContactsApp extends Application {
         super.onCreate();
         instance = this;
         database = Room.databaseBuilder(this, ContactDatabase.class, "database").build();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(ApplicationConstants.ServerConstants.SERVER_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+
     }
 
     public static ContactsApp getInstance() {
@@ -41,5 +54,9 @@ public class ContactsApp extends Application {
 
     public void setFavoriteContactList(List<FavoriteContact> favoriteContactList) {
         this.favoriteContactList = favoriteContactList;
+    }
+
+    public Retrofit getRetrofit() {
+        return retrofit;
     }
 }

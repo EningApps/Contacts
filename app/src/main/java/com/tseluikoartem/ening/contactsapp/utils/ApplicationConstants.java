@@ -30,4 +30,9 @@ public interface ApplicationConstants {
 
 
 
+    public interface  ServerConstants{
+        public static final String SERVER_BASE_URL = "https://contactsserver.herokuapp.com/";
+
+    }
+
 }

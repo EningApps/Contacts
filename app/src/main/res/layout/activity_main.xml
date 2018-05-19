@@ -19,10 +19,12 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/unknown_contact"/>
+            <ImageView
+                android:id="@+id/getting_contact_from_server"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/get_from_server" />
 
             
         </android.support.v7.widget.Toolbar>

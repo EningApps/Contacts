@@ -176,7 +176,7 @@ public class ContactIDetailsActivity extends AppCompatActivity {
     private void findNotesField(LayoutInflater ltInflater, ViewGroup layout) {
         final View notesView = ltInflater.inflate(R.layout.notes_card_view, layout, false);
         final TextView dataTV = notesView.findViewById(R.id.birhday_dateTV);
-        if(!mContact.getBirhday().equals(""))
+        if(mContact.getBirhday()!=null && !mContact.getBirhday().equals(""))
             dataTV.setText(mContact.getBirhday());
         else{
             dataTV.setVisibility(View.INVISIBLE);
@@ -221,6 +221,7 @@ public class ContactIDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Uri uri = Uri.parse("smsto:");
                 Intent sendContactIntent = new Intent(Intent.ACTION_SENDTO, uri);
+                sendContactIntent.putExtra(Contact.class.getCanonicalName(),mContact);
                 sendContactIntent.putExtra("sms_body", mContact.toString());
                 startActivity(Intent.createChooser(sendContactIntent, "Choose Program"));
             }
@@ -250,16 +251,16 @@ public class ContactIDetailsActivity extends AppCompatActivity {
     private void findSocialsFields(LayoutInflater ltInflater, ViewGroup layout) {
         final View socialsTitleView = ltInflater.inflate(R.layout.socials_title_cardview, layout, false);
         //chek if socials fields title needed
-        if(     !mContact.getVkUrl().equals("vk.com/") && !mContact.getVkUrl().equals("") ||
-                !mContact.getFacebookUrl().equals("facebook.com/") && !mContact.getFacebookUrl().equals("") ||
-                !mContact.getTwitterUrl().equals("twitter.com/") && !mContact.getTwitterUrl().equals("")||
-                !mContact.getGithubUrl().equals("github.com/") && !mContact.getGithubUrl().equals("")){
+        if(      mContact.getVkUrl()!=null && !mContact.getVkUrl().equals("vk.com/") && !mContact.getVkUrl().equals("") ||
+                 mContact.getFacebookUrl()!=null && !mContact.getFacebookUrl().equals("facebook.com/") && !mContact.getFacebookUrl().equals("") ||
+                 mContact.getTwitterUrl()!=null && !mContact.getTwitterUrl().equals("twitter.com/") && !mContact.getTwitterUrl().equals("")||
+                 mContact.getGithubUrl()!=null && !mContact.getGithubUrl().equals("github.com/") && !mContact.getGithubUrl().equals("")){
             layout.addView(socialsTitleView);
         }
 
         final View vkCardView = ltInflater.inflate(R.layout.vk_cardview, layout, false);
         final TextView vkLinkTV = vkCardView.findViewById(R.id.vk_linkTV);
-        if(!mContact.getVkUrl().equals("vk.com/") && !mContact.getVkUrl().equals("")){
+        if( mContact.getVkUrl()!=null && !mContact.getVkUrl().equals("vk.com/") && !mContact.getVkUrl().equals("")){
             vkLinkTV.setText(mContact.getVkUrl());
             vkCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -273,7 +274,7 @@ public class ContactIDetailsActivity extends AppCompatActivity {
 
         final View facebookCardView = ltInflater.inflate(R.layout.facebook_cardview, layout, false);
         final TextView facebookLinkTV = facebookCardView.findViewById(R.id.facebook_linkTV);
-        if(!mContact.getFacebookUrl().equals("facebook.com/") && !mContact.getFacebookUrl().equals("")){
+        if( mContact.getFacebookUrl()!=null && !mContact.getFacebookUrl().equals("facebook.com/") && !mContact.getFacebookUrl().equals("")){
             facebookLinkTV.setText(mContact.getFacebookUrl());
             facebookCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -287,7 +288,7 @@ public class ContactIDetailsActivity extends AppCompatActivity {
 
         final View twitterCardView = ltInflater.inflate(R.layout.twitter_cardview, layout, false);
         final TextView twitterLinkTV = twitterCardView.findViewById(R.id.twitter_linkTV);
-        if(!mContact.getTwitterUrl().equals("twitter.com/") && !mContact.getTwitterUrl().equals("")){
+        if( mContact.getTwitterUrl()!=null && !mContact.getTwitterUrl().equals("twitter.com/") && !mContact.getTwitterUrl().equals("")){
             twitterLinkTV.setText(mContact.getTwitterUrl());
             twitterCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -301,7 +302,7 @@ public class ContactIDetailsActivity extends AppCompatActivity {
 
         final View githubCardView = ltInflater.inflate(R.layout.github_cardview, layout, false);
         final TextView githubLinkTV = githubCardView.findViewById(R.id.github_linkTV);
-        if(!mContact.getGithubUrl().equals("github.com/") && !mContact.getGithubUrl().equals("")){
+        if( mContact.getGithubUrl()!=null && !mContact.getGithubUrl().equals("github.com/") && !mContact.getGithubUrl().equals("")){
             githubLinkTV.setText(mContact.getGithubUrl());
             githubCardView.setOnClickListener(new View.OnClickListener() {
                 @Override

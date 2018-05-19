@@ -49,8 +49,8 @@
                 android:id="@+id/ivBackArrowContact"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="5dp"
-                android:src="@drawable/ic_backarrow" />
+                android:layout_margin="4dp"
+                android:src="@drawable/back_arrow_minimal" />
 
             <TextView
                 android:id="@+id/contact_nameTV"

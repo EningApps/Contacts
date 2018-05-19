@@ -23,6 +23,7 @@ import android.view.MenuItem;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.FavoriteContactsAdapter;
+import com.tseluikoartem.ening.contactsapp.contacts_server.GetContactFromServerActivity;
 import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsAdapter;
 import com.tseluikoartem.ening.contactsapp.ContactsApp;
@@ -39,6 +40,9 @@ import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity
     private ContactsAdapter mAdapter;
     private List<Contact> mAdapterData;
     private List<FavoriteContact> favoriteContacts;
+    private View getContactFromServer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +65,15 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.collapsing_toolbar);
         setSupportActionBar(toolbar);
+
+        getContactFromServer = findViewById(R.id.getting_contact_from_server);
+
+        getContactFromServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), GetContactFromServerActivity.class));
+            }
+        });
 
         favoriteContacts = new ArrayList<>();
 
@@ -235,6 +250,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void recieveContactsData(List<Contact> data) {
         mAdapterData = data;
+        Collections.sort(mAdapterData, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return (o1.getName()+o1.getLastName()).compareTo((o2.getName()+o2.getLastName()));
+            }
+        });
         mAdapter.setData(mAdapterData);
         mAdapter.notifyDataSetChanged();
     }
