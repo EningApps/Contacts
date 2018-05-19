@@ -317,14 +317,15 @@
 
                 <EditText
                     android:id="@+id/vk_linkET"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
+                    android:layout_weight="3"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/grey"
-                    android:text="vk.com/"
                     android:hint="vk.com/user_id"
-                    android:textAlignment="center" />
+                    android:text="vk.com/"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey" />
 
                 <ImageView
                     android:layout_width="42dp"
@@ -332,6 +333,8 @@
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
                     android:elevation="8dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
                     android:scaleType="fitCenter"
                     android:src="@drawable/vk_icon_grey" />
 
@@ -344,20 +347,23 @@
 
                 <EditText
                     android:id="@+id/facebook_linkET"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/grey"
-                    android:text="facebook.com/"
                     android:hint="facebok.com/user_page"
-                    android:textAlignment="center" />
+                    android:text="facebook.com/"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey" />
 
                 <ImageView
                     android:layout_width="42dp"
                     android:layout_height="32dp"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
                     android:elevation="8dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/facebook_logo_grey" />
@@ -371,21 +377,24 @@
 
                 <EditText
                     android:id="@+id/twitter_linkET"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3"
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="8dp"
-                    android:textColor="@color/grey"
-                    android:text="twitter.com/"
                     android:hint="twitter.com/user_login"
-                    android:textAlignment="center" />
+                    android:text="twitter.com/"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey" />
 
                 <ImageView
                     android:layout_width="42dp"
                     android:layout_height="32dp"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
+                    android:layout_marginRight="4dp"
                     android:elevation="8dp"
+                    android:layout_weight="1"
                     android:scaleType="fitCenter"
                     android:src="@drawable/twitter_logo_grey" />
 
@@ -400,10 +409,11 @@
 
                 <EditText
                     android:id="@+id/github_linkET"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="8dp"
+                    android:layout_weight="3"
                     android:hint="github.com/user_login"
                     android:text="github.com/"
                     android:textAlignment="center"
@@ -415,6 +425,7 @@
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
                     android:elevation="8dp"
+                    android:layout_weight="1"
                     android:scaleType="fitCenter"
                     android:src="@drawable/github_logo_grey" />
 
