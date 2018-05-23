@@ -4,7 +4,6 @@ import com.tseluikoartem.ening.contactsapp.ContactsApp;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -52,14 +51,14 @@ public class DatabaseOperator {
     }
 
 
-    public void updateContact(final Contact contact,final  String oldName){
+    public void updateContact(final Contact contact,final  String oldName, final String phone){
         final ContactDatabase database = ContactsApp.getInstance().getDatabase();
         final ContactsDAO contactsDAO = database.contactsDAO();
         Contact respectiveContact = null;
         Callable<Contact> callable = new Callable<Contact>() {
             @Override
             public Contact call() throws Exception {
-                return contactsDAO.getByName(oldName);
+                return contactsDAO.getByParametrs(oldName,phone);
             }
         };
         FutureTask<Contact> futureTask = new FutureTask<Contact>(callable);
@@ -84,7 +83,7 @@ public class DatabaseOperator {
     }
 
 
-    public void updateFavoriteContact(final FavoriteContact favoriteContact, final String oldName){
+    public void updateFavoriteContact(final FavoriteContact favoriteContact, final String oldName, final String phone){
 
         final ContactDatabase database = ContactsApp.getInstance().getDatabase();
         final FavoriteContactsDAO favoriteContactsDAO = database.favoriteContactsDAO();
@@ -92,7 +91,7 @@ public class DatabaseOperator {
         Callable<FavoriteContact> callable = new Callable<FavoriteContact>() {
             @Override
             public FavoriteContact call() throws Exception {
-                return favoriteContactsDAO.getByName(oldName);
+                return favoriteContactsDAO.getByParams(oldName,phone);
             }
         };
         FutureTask<FavoriteContact> futureTask = new FutureTask<FavoriteContact>(callable);

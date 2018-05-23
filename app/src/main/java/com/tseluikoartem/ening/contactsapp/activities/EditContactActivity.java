@@ -64,17 +64,18 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
     private EditText facebookUrlET;
     private EditText twitterUrlET;
     private EditText githubUrlET;
+    private EditText meetingPlaceET;
 
     private Spinner phoneType;
     private CircleImageView contactPhoto;
     private TextView saveEditsButton;
     private DatePicker mBirhdayDatePicker;
     private ImageView pickBirthdayIV;
-    private Button openMapButton;
 
 
     private String contactPhotoUri;
     private String oldName;
+    private String oldPhone;
     private boolean editMode;
     private int mPreviousKeyStroke;
 
@@ -87,8 +88,10 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         if(intent!=null) {
             mContact = intent.getParcelableExtra(EditContactActivity.class.getCanonicalName());
             editMode = intent.getBooleanExtra(ApplicationConstants.EDIT_CONTACT_MODE_KEY,false);
-            if(mContact!=null)
+            if(mContact!=null) {
                 oldName = mContact.getName();
+                oldPhone = mContact.getPhoneNumber();
+            }
         }
         findViews();
         setViewsTexts();
@@ -99,7 +102,7 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
 
     void findViews(){
         contactPhoto = findViewById(R.id.edit_contact_photoIV);
-        if(mContact!=null)
+        if(mContact!=null )
             UniversalImageLoader.setImage(mContact.getProfileImageURI(),contactPhoto,null,"");
         saveEditsButton = findViewById(R.id.save_edits_button);
         if(editMode){
@@ -114,11 +117,12 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         saveEditsButton = (TextView) findViewById(R.id.save_edits_button);
         pickBirthdayIV = findViewById(R.id.pick_bithdayIV);
         birhdayET = findViewById(R.id.birhdayET);
-        mapET = findViewById(R.id.mapET);
+        mapET = findViewById(R.id.meeting_placeET);
         vkUrlET = findViewById(R.id.vk_linkET);
         facebookUrlET = findViewById(R.id.facebook_linkET);
         twitterUrlET = findViewById(R.id.twitter_linkET);
         githubUrlET = findViewById(R.id.github_linkET);
+        meetingPlaceET = findViewById(R.id.meeting_placeET);
 
     }
 
@@ -330,8 +334,8 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         }
         intent.putExtra(Contact.class.getCanonicalName(), newContact);
         if(editMode == true){
-            new DatabaseOperator().updateContact(newContact,oldName);
-            new DatabaseOperator().updateFavoriteContact(new FavoriteContact(newContact),oldName);
+            new DatabaseOperator().updateContact(newContact,oldName,oldPhone);
+            new DatabaseOperator().updateFavoriteContact(new FavoriteContact(newContact),oldName,oldPhone);
         }
         else{
 
@@ -460,6 +464,7 @@ public class EditContactActivity extends AppCompatActivity implements ChangePhot
         mContact.setFacebookUrl(facebookUrlET.getText().toString());
         mContact.setTwitterUrl(twitterUrlET.getText().toString());
         mContact.setGithubUrl(githubUrlET.getText().toString());
+        mContact.setMeetingPlace(mapET.getText().toString());
         return mContact;
     }
 

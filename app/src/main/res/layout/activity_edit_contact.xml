@@ -27,7 +27,6 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/grey_dashed_line"
                 android:gravity="center"
                 android:text="Сохранить"
                 android:textColor="@color/colorAccent"
@@ -129,7 +128,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/grey_border_bottom">
+            android:background="@color/white">
 
             <View
                 android:id="@+id/view"
@@ -144,8 +143,8 @@
                 android:layout_height="48dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
-                android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:src="@drawable/ic_phone_grey" />
 
             <Spinner
@@ -161,9 +160,9 @@
                 android:id="@+id/edit_phoneET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/select_device_spinner"
                 android:layout_toRightOf="@id/view"
                 android:hint="Phone(required)"
-                android:layout_below="@id/select_device_spinner"
                 android:inputType="phone"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -178,7 +177,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/grey_border_bottom">
+            android:background="@color/white">
 
             <View
                 android:id="@+id/view2"
@@ -217,7 +216,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/grey_border_bottom">
+            android:background="@color/white">
 
             <View
                 android:id="@+id/view3"
@@ -286,7 +285,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:background="@drawable/grey_border_bottom">
+            android:background="@color/white">
         </FrameLayout>
 
 
@@ -308,7 +307,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
-            android:background="@drawable/grey_border_bottom">
+            android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -435,20 +434,14 @@
         </LinearLayout>
 
 
-
-
-
-
-
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/grey_border_bottom">
+            android:layout_marginBottom="32dp"
+            android:background="@color/white">
 
             <View
                 android:layout_width="2dp"
@@ -464,11 +457,12 @@
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:src="@mipmap/contacts_app_icon_round" />
+                android:src="@drawable/location_icon" />
 
             <EditText
-                android:id="@+id/mapET"
-                android:layout_width="230dp"
+                android:id="@+id/meeting_placeET"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="2dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/map_icon"
                 android:layout_toEndOf="@+id/map_icon"
@@ -476,21 +470,6 @@
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
-
-            <Button
-                android:theme="@style/Widget.AppCompat.Button.Colored"
-                android:elevation="3dp"
-                android:id="@+id/mapIV"
-                android:layout_width="80dp"
-                android:layout_height="36dp"
-                android:layout_marginRight="8dp"
-                android:layout_alignBottom="@+id/mapET"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/rounded_button"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="Open maps" />
 
 
         </RelativeLayout>

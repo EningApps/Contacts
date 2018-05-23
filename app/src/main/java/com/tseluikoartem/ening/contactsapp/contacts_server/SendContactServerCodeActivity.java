@@ -19,7 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SendContactActivity extends AppCompatActivity {
+public class SendContactServerCodeActivity extends AppCompatActivity {
 
 
     private TextView contactIdTV;
@@ -53,10 +53,8 @@ public class SendContactActivity extends AppCompatActivity {
         contactNameTV.setText(mContact.getName());
         if(mContact.getProfileImageURI()!=null && !mContact.getProfileImageURI().equals(""))
             UniversalImageLoader.setImage(mContact.getProfileImageURI(),contactPhotoIV,null,"");
-    }
 
-    @Override
-    protected void onResume() {
+
         if(mContact!=null) {
             final Retrofit retrofit = ((ContactsApp) getApplication()).getRetrofit();
             final ContactsServerApi contactsServerApi = retrofit.create(ContactsServerApi.class);
@@ -73,11 +71,15 @@ public class SendContactActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Contact> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Error occured.",Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getApplicationContext(), "Error occured: " + t.getMessage(),Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             });
         }
+    }
+
+    @Override
+    protected void onResume() {
         super.onResume();
     }
 }

@@ -74,6 +74,8 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/edit_text_no_border"
             android:enabled="false"
+            android:imeOptions="actionDone"
+            android:textColor="@color/black"
             android:hint="..."
             android:inputType="text" />
 

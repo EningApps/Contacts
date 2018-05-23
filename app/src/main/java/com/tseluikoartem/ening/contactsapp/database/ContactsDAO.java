@@ -20,8 +20,8 @@ public interface ContactsDAO {
     @Query("SELECT * FROM contacts WHERE id = :id")
     Contact getById(long id);
 
-    @Query("SELECT * FROM contacts WHERE name = :name")
-    Contact getByName(String name);
+    @Query("SELECT * FROM contacts WHERE name = :name AND phoneNumber = :phoneNumber")
+    Contact getByParametrs(String name,String phoneNumber);
 
     @Insert
     void insert(Contact contact);

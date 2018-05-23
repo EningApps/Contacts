@@ -61,7 +61,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".contacts_server.SendContactActivity"
+            android:name=".contacts_server.SendContactServerCodeActivity"
             android:label="Send via server">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />

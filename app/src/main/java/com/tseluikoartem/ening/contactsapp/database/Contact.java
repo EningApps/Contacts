@@ -74,6 +74,8 @@ public class Contact implements Parcelable {
         twitterUrl = in.readString();
         githubUrl = in.readString();
         profileImageURI = in.readString();
+        notes = in.readString();
+        meetingPlace = in.readString();
     }
 
     @Override
@@ -92,6 +94,8 @@ public class Contact implements Parcelable {
         dest.writeString(twitterUrl);
         dest.writeString(githubUrl);
         dest.writeString(profileImageURI);
+        dest.writeString(notes);
+        dest.writeString(meetingPlace);
     }
 
     @Override

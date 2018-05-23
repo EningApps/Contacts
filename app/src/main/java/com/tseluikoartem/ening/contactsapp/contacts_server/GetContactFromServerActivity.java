@@ -132,5 +132,13 @@ public class GetContactFromServerActivity extends AppCompatActivity {
             }
         });
 
+
+        findViewById(R.id.send_contact_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new KeyboardOperator().hideKeyboard(v);
+            }
+        });
+
     }
 }

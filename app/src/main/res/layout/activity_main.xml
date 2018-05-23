@@ -23,8 +23,9 @@
                 android:id="@+id/getting_contact_from_server"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
+                android:layout_marginLeft="44dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/get_from_server" />
+                android:src="@drawable/cload2" />
 
             
         </android.support.v7.widget.Toolbar>
