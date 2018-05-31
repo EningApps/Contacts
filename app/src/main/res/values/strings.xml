@@ -15,13 +15,13 @@
     <string name="add_contact">Add Contact</string>
 
     <string-array name="device_options">
-        <item>Mobile</item>
-        <item>Home</item>
-        <item>Work</item>
-        <item>Work Fax</item>
-        <item>Home Fax</item>
-        <item>Pager</item>
-        <item>Other</item>
+        <item>Мобильный</item>
+        <item>Домашний</item>
+        <item>Рабочий</item>
+        <item>Рабочий факс</item>
+        <item>Домашний факс</item>
+        <item>Пэйджер</item>
+        <item>Другое</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

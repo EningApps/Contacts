@@ -62,7 +62,7 @@
 
         <activity
             android:name=".contacts_server.SendContactServerCodeActivity"
-            android:label="Send via server">
+            android:label="Отправить контакт">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 

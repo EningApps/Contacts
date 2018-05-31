@@ -21,7 +21,7 @@
             android:layout_marginTop="149dp"
             android:background="@drawable/wide_grey_border"
             android:gravity="center"
-            android:hint="Enter contact's id*"
+            android:hint="Введите ID контакта*"
             android:inputType="number"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -37,7 +37,7 @@
             android:layout_marginTop="13dp"
             android:enabled="false"
             android:fontFamily="monospace"
-            android:text="GET CONTACT"
+            android:text="Добавить"
             android:textColor="@color/light_grey"
             android:textSize="20sp" />
 
@@ -67,14 +67,14 @@
             android:layout_alignStart="@+id/get_contact_button"
             android:layout_below="@+id/contact_server_idED"
             android:layout_marginTop="17dp"
-            android:text="*You can get ID by pressing 'share via code' at contact's page" />
+            android:text="* Вы можете получить ID, нажав 'Отправить контакт' на странице контакта." />
 
         <ImageView
             android:id="@+id/loading_finishedIV"
             android:layout_width="128dp"
             android:layout_height="128dp"
+            android:layout_alignStart="@+id/progressBar"
             android:layout_alignTop="@+id/progressBar"
-            android:layout_centerHorizontal="true"
             android:visibility="invisible" />
 
 

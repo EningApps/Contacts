@@ -18,6 +18,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/favorites_title_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -36,7 +37,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/colorAccent"
-                    android:text="Favorities"
+                    android:text="Избранные"
                     android:textSize="18sp" />
 
             </LinearLayout>

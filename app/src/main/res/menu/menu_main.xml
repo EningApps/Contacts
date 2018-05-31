@@ -4,7 +4,7 @@
     tools:context="com.tseluikoartem.ening.contactsapp.activities.MainActivity">
 
     <item android:id="@+id/action_search"
-        android:title="Search"
+        android:title="Поиск"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
 

@@ -52,15 +52,15 @@
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="326dp"
+        android:layout_width="346dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/contact_id_keyTV"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/contact_id_keyTV"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="11dp"
         android:fontFamily="monospace"
-        android:text="Enter this code on another device to add contact"
+        android:text="Введите этот код на другом устройстве, чтобы добавить контакт."
         android:textColor="@color/light_grey"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <ProgressBar
         android:id="@+id/progressBar2"

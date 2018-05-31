@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -17,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +38,7 @@ import com.tseluikoartem.ening.contactsapp.utils.ApplicationConstants;
 import com.tseluikoartem.ening.contactsapp.utils.DataLoadingFragment;
 import com.tseluikoartem.ening.contactsapp.activities.contactsrecyclerview.ContactsCallback;
 import com.tseluikoartem.ening.contactsapp.utils.DeleteContactDialog;
+import com.tseluikoartem.ening.contactsapp.utils.KeyboardOperator;
 import com.tseluikoartem.ening.contactsapp.utils.UniversalImageLoader;
 
 
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.collapsing_toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.collapsing_toolbar);
         setSupportActionBar(toolbar);
 
         getContactFromServer = findViewById(R.id.getting_contact_from_server);
@@ -108,6 +111,14 @@ public class MainActivity extends AppCompatActivity
         mContactsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 
+        final View titleLayout = findViewById(R.id.favorites_title_layout);
+        titleLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new KeyboardOperator().hideKeyboard(toolbar);
+            }
+        });
+
         final ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ContactsCallback(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mContactsRecyclerView);
 
@@ -132,11 +143,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) searchItem.getActionView();
-
+        final SearchView searchView = findViewById(R.id.search_contact_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

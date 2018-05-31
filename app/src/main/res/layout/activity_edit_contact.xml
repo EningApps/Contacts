@@ -116,11 +116,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:text="Common information"
             android:layout_marginTop="32dp"
-            android:textSize="18sp"
+            android:fontFamily="sans-serif"
+            android:text="Общая информация"
             android:textColor="@color/colorAccent"
-            android:fontFamily="sans-serif" />
+            android:textSize="18sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/select_device_spinner"
                 android:layout_toRightOf="@id/view"
-                android:hint="Phone(required)"
+                android:hint="Телефон(обязательно)"
                 android:inputType="phone"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -202,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/view2"
-                android:hint="Email"
+                android:hint="Электронная почта"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -242,7 +242,7 @@
                 android:layout_alignTop="@+id/birthday_icon"
                 android:layout_toEndOf="@+id/birthday_icon"
                 android:focusable="false"
-                android:hint="Birhday"
+                android:hint="День рождения"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
@@ -264,6 +264,7 @@
                 android:layout_alignBottom="@+id/birhdayET"
                 android:layout_marginEnd="24dp"
                 android:layout_toStartOf="@+id/pick_bithdayIV"
+                android:visibility="invisible"
                 android:textSize="10sp" />
 
             <TextView
@@ -273,7 +274,9 @@
                 android:layout_above="@+id/check_box_add_calendar_event"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="22dp"
-                android:text="Add event to calendar"
+                android:layout_marginLeft="4dp"
+                android:visibility="invisible"
+                android:text="Добавить событие в календарь"
                 android:textSize="12sp" />
 
 
@@ -296,7 +299,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="32dp"
             android:fontFamily="sans-serif"
-            android:text="Extra information"
+            android:text="Дополнительно"
             android:textColor="@color/colorAccent"
             android:textSize="16sp" />
 
@@ -462,11 +465,11 @@
             <EditText
                 android:id="@+id/meeting_placeET"
                 android:layout_width="match_parent"
-                android:layout_marginLeft="2dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/map_icon"
+                android:layout_marginLeft="2dp"
                 android:layout_toEndOf="@+id/map_icon"
-                android:hint="Meeting place"
+                android:hint="Место знакомства"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
                 android:textSize="16sp" />

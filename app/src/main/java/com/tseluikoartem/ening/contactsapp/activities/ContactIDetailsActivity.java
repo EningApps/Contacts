@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.MapView;
 import com.tseluikoartem.ening.contactsapp.ContactsApp;
+import com.tseluikoartem.ening.contactsapp.contacts_server.SendContactServerCodeActivity;
 import com.tseluikoartem.ening.contactsapp.database.Contact;
 import com.tseluikoartem.ening.contactsapp.R;
 import com.tseluikoartem.ening.contactsapp.database.DatabaseOperator;
@@ -227,24 +228,16 @@ public class ContactIDetailsActivity extends AppCompatActivity {
         final View contactActivitiesCardView = ltInflater.inflate(R.layout.phone_activities_cardview, layout, false);
         layout.addView(contactActivitiesCardView);
 
-        final View sendMessView = contactActivitiesCardView.findViewById(R.id.send_messageTV);
         final View sendContactView = contactActivitiesCardView.findViewById(R.id.send_contactTV);
         final View addToFavView = contactActivitiesCardView.findViewById(R.id.add_to_favoriteTV);
-        sendMessView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", mContact.getPhoneNumber(), null));
-                startActivity(smsIntent);
-            }
-        });
+
         sendContactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("smsto:");
-                Intent sendContactIntent = new Intent(Intent.ACTION_SENDTO, uri);
+                Intent sendContactIntent = new Intent(getApplicationContext(),SendContactServerCodeActivity.class);
                 sendContactIntent.putExtra(Contact.class.getCanonicalName(), mContact);
-                sendContactIntent.putExtra("sms_body", mContact.toString());
-                startActivity(Intent.createChooser(sendContactIntent, "Choose Program"));
+                startActivity(sendContactIntent);
             }
         });
         addToFavView.setOnClickListener(new View.OnClickListener() {
